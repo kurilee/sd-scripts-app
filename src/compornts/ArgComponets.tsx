@@ -5,7 +5,7 @@ import { open } from '@tauri-apps/api/dialog'
 
 const titleWidth = "124px";
 const fullTitleWidth = "172px";
-const valueWidth = "500px";
+const valueWidth = "420px";
 const componentSize = 'small';
 
 export interface CmpBase<T> {
@@ -49,7 +49,7 @@ const CmpFile: React.FC<CmpFileProps> = (props: CmpFileProps) => {
 
     function showOptional() {
         if (isOptional) {
-            return (<Switch size={componentSize} type="round" checked={enable} onClick={()=> {
+            return (<Switch type="round" checked={enable} onClick={()=> {
                 setEnable(!enable);
             }}></Switch>);
         }
@@ -71,8 +71,8 @@ const CmpFile: React.FC<CmpFileProps> = (props: CmpFileProps) => {
         <Space style={{margin: '2px'}}>
         {showOptional()}
         <Typography style={isOptional ? { width: titleWidth } : { width: fullTitleWidth }}>{title}</Typography>
-        <Input size='mini' type='text' style={{ width: valueWidth }} disabled={!enable} value={value} onChange={ (value: string, e: any) => { onValueChanged(value, e) } }></Input>
-        <Button size='mini' disabled={!enable} onClick={ async (e) => { await onOpenClicked() }}>Open</Button>
+        <Input type='text' style={{ width: valueWidth }} disabled={!enable} value={value} onChange={ (value: string, e: any) => { onValueChanged(value, e) } }></Input>
+        <Button disabled={!enable} onClick={ async (e) => { await onOpenClicked() }}>Open</Button>
         </Space>
     </div>)
 };
@@ -176,7 +176,7 @@ const CmpSwitch: React.FC<CmpSwitchProps> = (props: CmpSwitchProps) => {
     return (<div>
         <Space style={{margin: '2px'}}>
         {showOptional()}
-        <Typography style={isOptional ? { width: titleWidth } : { width: fullTitleWidth }}>{title}</Typography>
+        <Typography>{title}</Typography>
         </Space>
     </div>)
 }
