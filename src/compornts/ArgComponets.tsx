@@ -6,14 +6,14 @@ import { open } from '@tauri-apps/api/dialog'
 const titleWidth = "124px";
 const fullTitleWidth = "172px";
 const valueWidth = "420px";
-const componentSize = 'small';
 
 export interface CmpBase<T> {
+    id: string,
     title: string,
-    value: T,
-    enable: boolean,
-    isOptional: boolean,
-    defaultValue: T,
+    value?: T,
+    enable?: boolean,
+    isOptional?: boolean,
+    defaultValue?: T,
 }
 export interface CmpFileProps extends CmpBase<string> {
     filters: Array<{ name: string, extensions: Array<string> }>
@@ -42,9 +42,9 @@ const CmpFile: React.FC<CmpFileProps> = (props: CmpFileProps) => {
     const [isOptional, setIsOptional] = useState<boolean>(false);
     useEffect(() => { 
         setTitle(props.title);
-        setValue(props.defaultValue);
-        setEnable(props.enable);
-        setIsOptional(props.isOptional);
+        setValue(props.defaultValue ?? '');
+        setEnable(props.enable ?? true);
+        setIsOptional(props.isOptional ?? false);
     }, [])
 
     function showOptional() {
@@ -84,9 +84,9 @@ const CmpFolder: React.FC<CmpFolderProps> = (props: CmpFolderProps) => {
     const [isOptional, setIsOptional] = useState<boolean>(false);
     useEffect(() => { 
         setTitle(props.title);
-        setValue(props.defaultValue);
-        setEnable(props.enable);
-        setIsOptional(props.isOptional);
+        setValue(props.defaultValue ?? '');
+        setEnable(props.enable ?? true);
+        setIsOptional(props.isOptional ?? false);
     }, [])
 
     function showOptional() {
@@ -127,9 +127,9 @@ const CmpText: React.FC<CmpTextProps> = (props: CmpTextProps) => {
     const [isOptional, setIsOptional] = useState<boolean>(false);
     useEffect(() => { 
         setTitle(props.title);
-        setValue(props.defaultValue);
-        setEnable(props.enable);
-        setIsOptional(props.isOptional);
+        setValue(props.defaultValue ?? '');
+        setEnable(props.enable ?? true);
+        setIsOptional(props.isOptional ?? false);
     }, [])
 
     function showOptional() {
@@ -160,9 +160,9 @@ const CmpSwitch: React.FC<CmpSwitchProps> = (props: CmpSwitchProps) => {
     const [isOptional, setIsOptional] = useState<boolean>(false);
     useEffect(() => { 
         setTitle(props.title);
-        setValue(props.defaultValue);
-        setEnable(props.enable);
-        setIsOptional(props.isOptional);
+        setValue(props.defaultValue ?? true);
+        setEnable(props.enable ?? true);
+        setIsOptional(props.isOptional ?? false);
     }, [])
 
     function showOptional() {
@@ -190,9 +190,9 @@ const CmpCombox: React.FC<CmpComboxProps> = (props: CmpComboxProps) => {
 
     useEffect(() => { 
         setTitle(props.title);
-        setValue(props.defaultValue);
-        setEnable(props.enable);
-        setIsOptional(props.isOptional);
+        setValue(props.defaultValue ?? '');
+        setEnable(props.enable ?? true);
+        setIsOptional(props.isOptional ?? false);
         setOptions(props.options);
     }, [])
 
@@ -235,9 +235,9 @@ const CmpNum: React.FC<CmpNumProps> = (props: CmpNumProps) => {
 
     useEffect(() => { 
         setTitle(props.title);
-        setValue(props.defaultValue);
-        setEnable(props.enable);
-        setIsOptional(props.isOptional);
+        setValue(props.defaultValue ?? 0);
+        setEnable(props.enable ?? true);
+        setIsOptional(props.isOptional ?? false);
         setMin(props.min);
         setMax(props.max);
         setStep(props.step);
