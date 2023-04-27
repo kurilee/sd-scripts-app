@@ -1,4 +1,4 @@
-import { List, Collapse, Space } from '@arco-design/web-react';
+import { Collapse } from '@arco-design/web-react';
 import { CmpFile, CmpFolder, CmpText, CmpSwitch, CmpCombox, CmpNum, CmpFileProps } from './compornts/ArgComponets';
 import { appDataDir } from '@tauri-apps/api/path';
 import { useEffect, useRef, useState } from 'react';
@@ -18,7 +18,7 @@ function App() {
     <div style={{ padding: "5px" }}>
       <Collapse className="comp_list">
         <Collapse.Item name='1' header="数据">
-          <CmpFile ref={abc} id='pretrained_model_name_or_path' title="基本模型" filters={[{ name: 'Checkpoint', extensions: ['safetensors', 'ckpt', 'pt'] }]}></CmpFile>
+          <CmpFile id='pretrained_model_name_or_path' title="基本模型" filters={[{ name: 'Checkpoint', extensions: ['safetensors', 'ckpt', 'pt'] }]}></CmpFile>
           <CmpFile id='vae' title="VAE" isOptional={true} filters={[{ name: 'VAE', extensions: ['safetensors', 'ckpt', 'pt'] }]}></CmpFile>
           <CmpFolder id='train_data_dir' title="训练集" defaultPath={defaultAppConfigPath} ></CmpFolder>
           <CmpFolder id='output_dir' title="输出路径" defaultPath={defaultAppConfigPath} ></CmpFolder>
