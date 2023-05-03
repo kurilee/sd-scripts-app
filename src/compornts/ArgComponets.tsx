@@ -1,29 +1,35 @@
-import React from 'react'
-import { useState, useEffect } from 'react'
+import { useRef, useImperativeHandle } from 'react'
+import { useState, useEffect, forwardRef } from 'react'
 import { Button, Switch, Input, Typography, Space, Select, InputNumber } from '@arco-design/web-react'
 import { open } from '@tauri-apps/api/dialog'
+import { RefInputType } from '@arco-design/web-react/es/Input/interface';
+import { SelectHandle } from '@arco-design/web-react/es/Select/interface';
+import { appConfigDir } from '@tauri-apps/api/path';
 
+// 常量属性
 const titleWidth = "124px";
 const fullTitleWidth = "172px";
 const valueWidth = "420px";
 
+// props
 export interface CmpBase<T> {
     id: string,
     title: string,
-    value?: T,
+    // value?: T,
     enable?: boolean,
     isOptional?: boolean,
     defaultValue?: T,
 }
 export interface CmpFileProps extends CmpBase<string> {
-    filters: Array<{ name: string, extensions: Array<string> }>
+    filters: Array<{ name: string, extensions: Array<string> }>,
+    defaultPath: string | null
 }
 export interface CmpFolderProps extends CmpBase<string> {
-    defaultPath: string
+    defaultPath: string | null
 }
 export interface CmpTextProps extends CmpBase<string> {
 }
-export interface CmpSwitchProps extends CmpBase<boolean> {    
+export interface CmpSwitchProps extends CmpBase<boolean> {
 }
 export interface CmpComboxProps extends CmpBase<string> {
     options: Array<string>
@@ -32,198 +38,188 @@ export interface CmpNumProps extends CmpBase<number> {
     min: number,
     max: number,
     step: number,
-    precision: number    
+    precision: number
 }
 
-const CmpFile: React.FC<CmpFileProps> = (props: CmpFileProps) => {
+export interface CmpBaseRef {
+    getArgumentString: () => string;
+}
+
+const CmpFile = forwardRef<CmpBaseRef, CmpFileProps>((props, ref) => {
     const [title, setTitle] = useState<string>("");
     const [value, setValue] = useState<string>("");
     const [enable, setEnable] = useState<boolean>(true);
+    const [defaultValue, setDefaultValue] = useState<string>('');
     const [isOptional, setIsOptional] = useState<boolean>(false);
-    useEffect(() => { 
+    const inputRef = useRef<RefInputType>(null);
+    useEffect(() => {
         setTitle(props.title);
         setValue(props.defaultValue ?? '');
         setEnable(props.enable ?? true);
+        setDefaultValue(props.defaultValue ?? '');
         setIsOptional(props.isOptional ?? false);
     }, [])
-
-    function showOptional() {
-        if (isOptional) {
-            return (<Switch type="round" checked={enable} onClick={()=> {
-                setEnable(!enable);
-            }}></Switch>);
-        }
-    }
-
-    function onValueChanged(value: string, e: any) {
-
-    }
 
     async function onOpenClicked() {
         const select = await open({
-            filters: props.filters
+            filters: props.filters,
+            defaultPath: props.defaultPath ?? await appConfigDir()
         })
 
-        if (typeof(select) == 'string') setValue(select);
+        if (typeof (select) == 'string') setValue(select);
     }
 
+    useImperativeHandle(ref, () => ({
+        getArgumentString: () => {
+            return (isOptional && !enable) ? '' : `--${props.id}=${value}` 
+        }
+    }));
+
     return (<div>
-        <Space style={{margin: '2px'}}>
-        {showOptional()}
-        <Typography style={isOptional ? { width: titleWidth } : { width: fullTitleWidth }}>{title}</Typography>
-        <Input type='text' style={{ width: valueWidth }} disabled={!enable} value={value} onChange={ (value: string, e: any) => { onValueChanged(value, e) } }></Input>
-        <Button disabled={!enable} onClick={ async (e) => { await onOpenClicked() }}>Open</Button>
+        <Space style={{ margin: '2px' }}>
+            {isOptional && <Switch type="round" checked={enable} onChange={setEnable}></Switch>}
+            <Typography style={isOptional ? { width: titleWidth } : { width: fullTitleWidth }}>{title}</Typography>
+            <Input ref={inputRef} type='text' style={{ width: valueWidth }} disabled={!enable} value={value} defaultValue={defaultValue} onChange={ (v) => {setValue(v)} }></Input>
+            <Button disabled={!enable} onClick={async () => { await onOpenClicked() }}>Open</Button>
         </Space>
     </div>)
-};
+});
 
-const CmpFolder: React.FC<CmpFolderProps> = (props: CmpFolderProps) => {
+const CmpFolder = forwardRef<CmpBaseRef, CmpFolderProps>((props, ref) => {
     const [title, setTitle] = useState<string>("");
     const [value, setValue] = useState<string>("");
     const [enable, setEnable] = useState<boolean>(true);
+    const [defaultValue, setDefaultValue] = useState<string>('');
     const [isOptional, setIsOptional] = useState<boolean>(false);
-    useEffect(() => { 
+    const inputRef = useRef<RefInputType>(null)
+    useEffect(() => {
         setTitle(props.title);
         setValue(props.defaultValue ?? '');
         setEnable(props.enable ?? true);
+        setDefaultValue(props.defaultValue ?? '');
         setIsOptional(props.isOptional ?? false);
     }, [])
 
-    function showOptional() {
-        if (isOptional) {
-            return (<Switch type="round" checked={enable} onClick={()=> {
-                setEnable(!enable);
-            }}></Switch>);
+    useImperativeHandle(ref, () => ({
+        getArgumentString: () => {
+            return (isOptional && !enable) ? '' : `--${props.id}=${value}`
         }
-    }
-
-    function onValueChanged(value: string, e: any) {
-
-    }
+    }));
 
     async function onOpenClicked() {
         const select = await open({
             directory: true,
-            defaultPath: props.defaultPath
+            defaultPath: props.defaultPath ?? await appConfigDir()
         })
 
-        if (typeof(select) == 'string') setValue(select);
+        if (typeof (select) == 'string') setValue(select);
     }
 
     return (<div>
-        <Space style={{margin: '2px'}}>
-        {showOptional()}
-        <Typography style={isOptional ? { width: titleWidth } : { width: fullTitleWidth }}>{title}</Typography>
-        <Input type='text' style={{ width: valueWidth }} disabled={!enable} value={value} onChange={ (value: string, e: any) => { onValueChanged(value, e) } }></Input>
-        <Button disabled={!enable} onClick={ async (e) => { await onOpenClicked() }}>Open</Button>
+        <Space style={{ margin: '2px' }}>
+            {isOptional && <Switch type="round" checked={enable} onChange={setEnable}></Switch>}
+            <Typography style={isOptional ? { width: titleWidth } : { width: fullTitleWidth }}>{title}</Typography>
+            <Input ref={inputRef} type='text' style={{ width: valueWidth }} disabled={!enable} value={value} defaultValue={defaultValue} onChange={ v => setValue(v) }></Input>
+            <Button disabled={!enable} onClick={async (e) => { await onOpenClicked() }}>Open</Button>
         </Space>
     </div>)
-}
+});
 
-const CmpText: React.FC<CmpTextProps> = (props: CmpTextProps) => {
+const CmpText = forwardRef<CmpBaseRef, CmpTextProps>((props, ref) => {
     const [title, setTitle] = useState<string>("");
     const [value, setValue] = useState<string>("");
     const [enable, setEnable] = useState<boolean>(true);
+    const [defaultValue, setDefaultValue] = useState<string>('');
     const [isOptional, setIsOptional] = useState<boolean>(false);
-    useEffect(() => { 
+    const inputRef = useRef<RefInputType>(null);
+    useEffect(() => {
         setTitle(props.title);
         setValue(props.defaultValue ?? '');
         setEnable(props.enable ?? true);
+        setDefaultValue(props.defaultValue ?? '');
         setIsOptional(props.isOptional ?? false);
     }, [])
 
-    function showOptional() {
-        if (isOptional) {
-            return (<Switch type="round" checked={enable} onClick={()=> {
-                setEnable(!enable);
-            }}></Switch>);
+    useImperativeHandle(ref, () => ({
+        getArgumentString: () => {
+            return (isOptional && !enable) ? '' : `--${props.id}=${value}`
         }
-    }
-
-    function onValueChanged(value: string, e: any) {
-
-    }
+    }));
 
     return (<div>
-        <Space style={{margin: '2px'}}>
-        {showOptional()}
-        <Typography style={isOptional ? { width: titleWidth } : { width: fullTitleWidth }}>{title}</Typography>
-        <Input type='text' style={{ width: valueWidth }} disabled={!enable} value={value} onChange={ (value: string, e: any) => { onValueChanged(value, e) } }></Input>
+        <Space style={{ margin: '2px' }}>
+        {isOptional && <Switch type="round" checked={enable} onChange={setEnable}></Switch>}
+            <Typography style={isOptional ? { width: titleWidth } : { width: fullTitleWidth }}>{title}</Typography>
+            <Input ref={inputRef} type='text' style={{ width: valueWidth }} disabled={!enable} value={value} defaultValue={defaultValue} onChange={(v) => setValue(v) }></Input>
         </Space>
     </div>)
-}
+})
 
-const CmpSwitch: React.FC<CmpSwitchProps> = (props: CmpSwitchProps) => {
+const CmpSwitch = forwardRef<CmpBaseRef, CmpSwitchProps>((props, ref) => {
     const [title, setTitle] = useState<string>("");
     const [value, setValue] = useState<boolean>(false);
     const [enable, setEnable] = useState<boolean>(true);
     const [isOptional, setIsOptional] = useState<boolean>(false);
-    useEffect(() => { 
+    useEffect(() => {
         setTitle(props.title);
         setValue(props.defaultValue ?? true);
         setEnable(props.enable ?? true);
         setIsOptional(props.isOptional ?? false);
     }, [])
 
-    function showOptional() {
-        if (isOptional) {
-            return (<Switch type="round" checked={enable} onClick={()=> {
-                setEnable(!enable);
-            }}></Switch>);
+    useImperativeHandle(ref, () => ({
+        getArgumentString: () => {
+            return (isOptional && !enable) ? '' : `--${props.id}`
         }
-    }
+    }));
 
     return (<div>
-        <Space style={{margin: '2px'}}>
-        {showOptional()}
-        <Typography>{title}</Typography>
+        <Space style={{ margin: '2px' }}>
+            {isOptional && <Switch type="round" checked={enable} onChange={setEnable}></Switch>}
+            <Typography>{title}</Typography>
         </Space>
     </div>)
-}
+})
 
-const CmpCombox: React.FC<CmpComboxProps> = (props: CmpComboxProps) => {
+const CmpCombox = forwardRef<CmpBaseRef, CmpComboxProps>((props, ref) => {
     const [title, setTitle] = useState<string>("");
     const [value, setValue] = useState<string>("");
     const [enable, setEnable] = useState<boolean>(true);
+    const [defaultValue, setDefaultValue] = useState<string>("");
     const [isOptional, setIsOptional] = useState<boolean>(false);
     const [options, setOptions] = useState<Array<string>>([]);
-
-    useEffect(() => { 
+    const selectRef = useRef<SelectHandle>(null);
+    useEffect(() => {
         setTitle(props.title);
         setValue(props.defaultValue ?? '');
         setEnable(props.enable ?? true);
+        setDefaultValue(props.defaultValue ?? '');
         setIsOptional(props.isOptional ?? false);
         setOptions(props.options);
     }, [])
 
-    function showOptional() {
-        if (isOptional) {
-            return (<Switch type="round" checked={enable} onClick={()=> {
-                setEnable(!enable);
-            }}></Switch>);
+    useImperativeHandle(ref, () => ({
+        getArgumentString: () => {
+            return (isOptional && !enable) ? '' : `--${props.id}=${value}`
         }
-    }
-
-    function onValueChanged(value: string, e: any) {
-
-    }
+    }));
 
     return (<div>
-        <Space style={{margin: '2px'}}>
-        {showOptional()}
-        <Typography style={isOptional ? { width: titleWidth } : { width: fullTitleWidth }}>{title}</Typography>
-        <Select style={{ width: valueWidth }} disabled={!enable} value={value} onChange={ (value: string, e: any) => { onValueChanged(value, e) } }>
-            {
-                options.map((opt,idx) => {
-                    return (<Select.Option id={idx.toString()} value={opt}></Select.Option>)
-                })
-            }
-        </Select>
+        <Space style={{ margin: '2px' }}>
+            {isOptional && <Switch type="round" checked={enable} onChange={setEnable}></Switch>}
+            <Typography style={isOptional ? { width: titleWidth } : { width: fullTitleWidth }}>{title}</Typography>
+            <Select ref={selectRef} style={{ width: valueWidth }} disabled={!enable} value={value} defaultValue={defaultValue} onChange={ v => setValue(v) }>
+                {
+                    options.map((opt, idx) => {
+                        return (<Select.Option key={idx.toString()} value={opt}>{opt}</Select.Option>)
+                    })
+                }
+            </Select>
         </Space>
     </div>)
-}
+})
 
-const CmpNum: React.FC<CmpNumProps> = (props: CmpNumProps) => {
+const CmpNum = forwardRef<CmpBaseRef, CmpNumProps>((props, ref) => {
     const [title, setTitle] = useState<string>("");
     const [value, setValue] = useState<number>(0);
     const [enable, setEnable] = useState<boolean>(true);
@@ -232,8 +228,9 @@ const CmpNum: React.FC<CmpNumProps> = (props: CmpNumProps) => {
     const [max, setMax] = useState<number>(10);
     const [step, setStep] = useState<number>(1);
     const [precision, setPrecision] = useState<number>(1);
+    const inputRef = useRef<RefInputType>(null);
 
-    useEffect(() => { 
+    useEffect(() => {
         setTitle(props.title);
         setValue(props.defaultValue ?? 0);
         setEnable(props.enable ?? true);
@@ -244,25 +241,19 @@ const CmpNum: React.FC<CmpNumProps> = (props: CmpNumProps) => {
         setPrecision(props.precision);
     }, [])
 
-    function showOptional() {
-        if (isOptional) {
-            return (<Switch type="round" checked={enable} onClick={()=> {
-                setEnable(!enable);
-            }}></Switch>);
+    useImperativeHandle(ref, () => ({
+        getArgumentString: () => {
+            return (isOptional && !enable) ? '' : `--${props.id}=${inputRef.current?.dom.value}`
         }
-    }
-
-    function onValueChanged(value: string, e: any) {
-
-    }
+    }));
 
     return (<div>
-        <Space style={{margin: '2px'}}>
-        {showOptional()}
-        <Typography style={isOptional ? { width: titleWidth } : { width: fullTitleWidth }}>{title}</Typography>
-        <InputNumber style={{ width: valueWidth }} mode='button' defaultValue={props.defaultValue} min={min} max={max} step={step} precision={precision} disabled={!enable}></InputNumber>
+        <Space style={{ margin: '2px' }}>
+            {isOptional && <Switch type="round" checked={enable} onChange={setEnable}></Switch>}
+            <Typography style={isOptional ? { width: titleWidth } : { width: fullTitleWidth }}>{title}</Typography>
+            <InputNumber ref={inputRef} style={{ width: valueWidth }} mode='button' defaultValue={props.defaultValue} min={min} max={max} step={step} precision={precision} disabled={!enable}></InputNumber>
         </Space>
     </div>)
-}
+})
 
 export { CmpFile, CmpFolder, CmpText, CmpSwitch, CmpCombox, CmpNum };
