@@ -13,6 +13,21 @@
   "tauri": {
     "allowlist": {
       "all": false,
+      "shell": {
+        "all": true,
+        "scope": [
+          {
+            "name": "active-venv",
+            "cmd": ".\\venv\\Scripts\\activate",
+            "args": []
+          },
+          {
+            "name": "train",
+            "cmd": "python -m accelerate.commands.launch --num_cpu_threads_per_process=8 train_network.py",
+            "args": []
+          }
+        ]
+      },
       "path": {
         "all": true
       },

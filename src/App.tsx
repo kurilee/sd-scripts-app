@@ -7,31 +7,14 @@ import './App.css';
 
 const optTypes = ['AdamW', 'AdamW8bit', 'Lion', 'SGDNesterov', 'SGDNesterov8bit', 'DAdaptation', 'AdaFactor'];
 const lrSchedulers = ['linear', 'cosine', 'cosine_with_restarts', 'polynomial', 'constant', 'constant_with_warmup', 'adafactor'];
-const samplerTypes = [
-  'ddim',
-  'pndm',
-  'lms',
-  'euler',
-  'euler_a',
-  'heun',
-  'dpm_2',
-  'dpm_2_a',
-  'dpmsolver',
-  'dpmsolver++',
-  'dpmsingle',
-  'k_lms',
-  'k_euler',
-  'k_euler_a',
-  'k_dpm_2',
-  'k_dpm_2_a',
-];
+const samplerTypes = ['ddim', 'pndm', 'lms', 'euler', 'euler_a', 'heun', 'dpm_2', 'dpm_2_a', 'dpmsolver', 'dpmsolver++', 'dpmsingle', 'k_lms', 'k_euler', 'k_euler_a', 'k_dpm_2', 'k_dpm_2_a'];
 
 const cmd_first = '.\\venv\\Scripts\\activate';
 
 function App() {
   const [defaultAppConfigPath, setDefaultAppConfigPath] = useState('');
   const [result, setResult] = useState('');
-  const args = 37;
+  const args = 39;
   const refs: Array<React.RefObject<CmpBaseRef>> = [];
   for (let i = 0; i < args; ++i) {
     const ref = useRef<CmpBaseRef>(null);
@@ -49,6 +32,22 @@ function App() {
     setResult(cmd);
   };
 
+  const runShell = (): void => {
+    const command = new Command('active-venv');
+    command.execute();
+  };
+
+  const runTrain = (): void => {
+    var args = '';
+    refs.map((ref) => {
+      args += ref.current?.getArgumentString() + ' ';
+    });
+
+    const command = new Command('train', args);
+
+    command.execute();
+  };
+
   return (
     <div style={{ padding: '5px' }}>
       <Space>
@@ -59,24 +58,23 @@ function App() {
           }}>
           生成命令
         </Button>
-        <Button>读取配置</Button>
-        <Button>加载配置</Button>
+        <Button
+          onClick={() => {
+            runShell();
+          }}>
+          读取配置
+        </Button>
+        <Button
+          onClick={() => {
+            runTrain();
+          }}>
+          加载配置
+        </Button>
       </Space>
       <Collapse className="comp_list" bordered={false} lazyload={false}>
         <Collapse.Item name="1" header="数据">
-          <CmpFile
-            ref={refs[0]}
-            id="pretrained_model_name_or_path"
-            title="基本模型"
-            filters={[{ name: 'Checkpoint', extensions: ['safetensors', 'ckpt', 'pt'] }]}
-            defaultPath={'D:\\Projects\\stable-diffusion-webui\\models\\Stable-diffusion\\'}></CmpFile>
-          <CmpFile
-            ref={refs[1]}
-            id="vae"
-            title="VAE"
-            isOptional={true}
-            filters={[{ name: 'VAE', extensions: ['safetensors', 'ckpt', 'pt'] }]}
-            defaultPath={'D:\\Projects\\stable-diffusion-webui\\models\\VAE\\'}></CmpFile>
+          <CmpFile ref={refs[0]} id="pretrained_model_name_or_path" title="基本模型" filters={[{ name: 'Checkpoint', extensions: ['safetensors', 'ckpt', 'pt'] }]} defaultPath={'D:\\Projects\\stable-diffusion-webui\\models\\Stable-diffusion\\'}></CmpFile>
+          <CmpFile ref={refs[1]} id="vae" title="VAE" isOptional={true} filters={[{ name: 'VAE', extensions: ['safetensors', 'ckpt', 'pt'] }]} defaultPath={'D:\\Projects\\stable-diffusion-webui\\models\\VAE\\'}></CmpFile>
           <CmpFolder ref={refs[2]} id="train_data_dir" title="train_data_dir" defaultPath={'D:\\LoraTrainData\\trains\\'}></CmpFolder>
           <CmpFolder ref={refs[3]} id="output_dir" title="output_dir" defaultPath={'D:\\LoraTrainData\\output\\'}></CmpFolder>
           <CmpText ref={refs[4]} id="output_name" title="output_name"></CmpText>
@@ -100,25 +98,9 @@ function App() {
           <CmpCombox ref={refs[16]} id="optimizer_type" title="optimizer_type" defaultValue="Lion" options={optTypes}></CmpCombox>
           <CmpText ref={refs[17]} id="network_module" title="network_module" defaultValue="networks.lora" enable={false}></CmpText>
           <CmpNum ref={refs[18]} id="max_train_epochs" title="max_train_epochs" defaultValue={10} min={1} max={300} step={1} precision={0}></CmpNum>
-          <CmpNum
-            ref={refs[19]}
-            id="learning_rate"
-            title="learning_rate"
-            defaultValue={0.00001}
-            min={0.000001}
-            max={0.001}
-            step={0.000001}
-            precision={6}></CmpNum>
+          <CmpNum ref={refs[19]} id="learning_rate" title="learning_rate" defaultValue={0.00001} min={0.000001} max={0.001} step={0.000001} precision={6}></CmpNum>
           <CmpNum ref={refs[20]} id="unet_lr" title="unet_lr" defaultValue={0.00001} min={0.000001} max={0.001} step={0.000001} precision={6}></CmpNum>
-          <CmpNum
-            ref={refs[21]}
-            id="text_encoder_lr"
-            title="TextEncordLr"
-            defaultValue={0.00001}
-            min={0.000001}
-            max={0.001}
-            step={0.000001}
-            precision={6}></CmpNum>
+          <CmpNum ref={refs[21]} id="text_encoder_lr" title="TextEncordLr" defaultValue={0.00001} min={0.000001} max={0.001} step={0.000001} precision={6}></CmpNum>
           <CmpNum ref={refs[22]} id="network_dim" title="NetworkDim" defaultValue={32} min={1} max={128} step={1} precision={0}></CmpNum>
           <CmpNum ref={refs[23]} id="network_alpha" title="NetworkAlpha" defaultValue={32} min={1} max={128} step={1} precision={0}></CmpNum>
           <CmpNum ref={refs[24]} id="train_batch_size" title="train_batch_size" defaultValue={1} min={1} max={5} step={1} precision={0}></CmpNum>
@@ -126,87 +108,28 @@ function App() {
 
         <Collapse.Item name="4" header="学习策略">
           <CmpCombox ref={refs[25]} id="lr_scheduler" title="lr_scheduler" defaultValue="cosine_with_restarts" options={lrSchedulers}></CmpCombox>
-          <CmpNum
-            ref={refs[26]}
-            id="lr_scheduler_num_cycles"
-            title="lr_scheduler_num_cycles"
-            defaultValue={4}
-            isOptional={true}
-            min={1}
-            max={30}
-            step={0}
-            precision={0}></CmpNum>
+          <CmpNum ref={refs[26]} id="lr_scheduler_num_cycles" title="lr_scheduler_num_cycles" defaultValue={4} isOptional={true} min={1} max={30} step={0} precision={0}></CmpNum>
         </Collapse.Item>
+
         <Collapse.Item name="5" header="Tag相关参数">
           <CmpText ref={refs[27]} id="caption_extension" title="caption_extension" defaultValue=".txt"></CmpText>
           <CmpNum ref={refs[28]} id="max_token_length" title="max_token_length" defaultValue={225} min={150} max={225} step={1} precision={0}></CmpNum>
           <CmpSwitch ref={refs[29]} id="shuffle_caption" title="shuffle_caption" defaultValue={true} isOptional={true}></CmpSwitch>
           <CmpNum ref={refs[30]} id="keep_tokens" title="keep_tokens" defaultValue={1} isOptional={true} min={0} max={999} step={1} precision={0}></CmpNum>
         </Collapse.Item>
+
         <Collapse.Item name="6" header="预览">
-          <CmpNum
-            ref={refs[31]}
-            id="sample_every_n_epochs"
-            title="sample_every_n_epochs"
-            enable={false}
-            defaultValue={1}
-            isOptional={true}
-            min={0}
-            max={300}
-            step={1}
-            precision={0}></CmpNum>
-          <CmpFile
-            ref={refs[32]}
-            id="sample_prompts"
-            title="sample_prompts"
-            enable={false}
-            defaultValue=""
-            isOptional={true}
-            filters={[{ name: 'Prompt', extensions: ['txt'] }]}
-            defaultPath={'D:\\LoraTrainData\\trains\\'}></CmpFile>
-          <CmpCombox
-            ref={refs[33]}
-            id="sample_sampler"
-            title="sample_sampler"
-            enable={false}
-            defaultValue="k_dpm_2_a"
-            isOptional={true}
-            options={samplerTypes}></CmpCombox>
+          <CmpNum ref={refs[31]} id="sample_every_n_epochs" title="sample_every_n_epochs" enable={false} defaultValue={1} isOptional={true} min={0} max={300} step={1} precision={0}></CmpNum>
+          <CmpFile ref={refs[32]} id="sample_prompts" title="sample_prompts" enable={false} defaultValue="" isOptional={true} filters={[{ name: 'Prompt', extensions: ['txt'] }]} defaultPath={'D:\\LoraTrainData\\trains\\'}></CmpFile>
+          <CmpCombox ref={refs[33]} id="sample_sampler" title="sample_sampler" enable={false} defaultValue="k_dpm_2_a" isOptional={true} options={samplerTypes}></CmpCombox>
         </Collapse.Item>
+
         <Collapse.Item name="7" header="增强参数">
-          <CmpNum
-            ref={refs[34]}
-            id="noise_offset"
-            title="noise_offset"
-            enable={false}
-            defaultValue={0.01}
-            isOptional={true}
-            min={0}
-            max={1}
-            step={0.001}
-            precision={3}></CmpNum>
-          <CmpNum
-            ref={refs[35]}
-            id="prior_loss_weight"
-            title="prior_loss_weight"
-            enable={false}
-            defaultValue={1}
-            isOptional={true}
-            min={0}
-            max={1}
-            step={0.01}
-            precision={2}></CmpNum>
-          <CmpNum
-            ref={refs[36]}
-            id="min_snr_gamma"
-            title="min_snr_gamma"
-            enable={false}
-            defaultValue={5}
-            isOptional={true}
-            min={0}
-            max={10}
-            step={1}
-            precision={0}></CmpNum>
+          <CmpNum ref={refs[34]} id="noise_offset" title="noise_offset" enable={false} defaultValue={0.01} isOptional={true} min={0} max={1} step={0.001} precision={3}></CmpNum>
+          <CmpNum ref={refs[35]} id="multires_noise_iterations" title="multires_noise_iterations" enable={false} defaultValue={6} isOptional={true} min={0} max={10} step={1} precision={0}></CmpNum>
+          <CmpNum ref={refs[36]} id="multires_noise_discount" title="multires_noise_discount" enable={false} defaultValue={0.3} isOptional={true} min={0.1} max={0.8} step={0.1} precision={1}></CmpNum>
+          <CmpNum ref={refs[37]} id="prior_loss_weight" title="prior_loss_weight" enable={false} defaultValue={1} isOptional={true} min={0} max={1} step={0.01} precision={2}></CmpNum>
+          <CmpNum ref={refs[38]} id="min_snr_gamma" title="min_snr_gamma" enable={false} defaultValue={5} isOptional={true} min={0} max={10} step={1} precision={0}></CmpNum>
         </Collapse.Item>
       </Collapse>
       <Typography>{result}</Typography>
