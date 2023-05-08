@@ -1,6 +1,6 @@
 import { Collapse, Space, Button, Typography } from '@arco-design/web-react';
 import { CmpBaseRef, CmpFile, CmpFolder, CmpText, CmpSwitch, CmpCombox, CmpNum } from './compornts/ArgComponets';
-import { appDataDir } from '@tauri-apps/api/path';
+import { appDataDir,resourceDir } from '@tauri-apps/api/path';
 import { Command } from '@tauri-apps/api/shell';
 import { useEffect, useRef, useState } from 'react';
 import './App.css';
@@ -21,7 +21,7 @@ function App() {
     refs.push(ref);
   }
   useEffect(() => {
-    appDataDir().then(setDefaultAppConfigPath);
+    resourceDir().then(setResult);
   }, []);
 
   const createCommand = (): void => {
@@ -32,9 +32,17 @@ function App() {
     setResult(cmd);
   };
 
-  const runShell = (): void => {
-    const command = new Command('active-venv');
-    command.execute();
+  const runCreateVenv = async () => {
+    const command = new Command('pwd');
+    const pwdresult = await command.execute();
+    setResult(pwdresult.stdout);
+  };
+
+  const runShell = async () => {
+    const command = new Command('create-venv');
+    await command.execute();
+    const c2 = new Command('active-venv');
+    await c2.spawn
   };
 
   const runTrain = (): void => {
@@ -60,13 +68,13 @@ function App() {
         </Button>
         <Button
           onClick={() => {
-            runShell();
+            runCreateVenv();
           }}>
           读取配置
         </Button>
         <Button
           onClick={() => {
-            runTrain();
+            runShell();
           }}>
           加载配置
         </Button>

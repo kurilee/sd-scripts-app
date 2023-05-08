@@ -22,6 +22,16 @@
             "args": []
           },
           {
+            "name": "create-venv",
+            "cmd": "python",
+            "args": ["-m", "venv", "venv"]
+          },
+          {
+            "name": "pwd",
+            "cmd": "pwd",
+            "args": []
+          },
+          {
             "name": "train",
             "cmd": "python -m accelerate.commands.launch --num_cpu_threads_per_process=8 train_network.py",
             "args": []
