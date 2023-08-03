@@ -87,7 +87,7 @@ function App() {
 
           <Collapse.Item name="5" header="Tag相关参数">
             <CmpText ref={getRef()} id="caption_extension" title="Caption Extension" defaultValue=".txt"></CmpText>
-            <CmpNum ref={getRef()} id="max_token_length" title="Max Token Length" defaultValue={75} min={75} max={225} step={1} precision={0}></CmpNum>
+            <CmpNum ref={getRef()} id="max_token_length" title="Max Token Length" defaultValue={255} min={75} max={225} step={1} precision={0}></CmpNum>
             <CmpSwitch ref={getRef()} id="shuffle_caption" title="Shuffle Caption" defaultValue={true} isOptional={true}></CmpSwitch>
             <CmpNum ref={getRef()} id="keep_tokens" title="Keep Tokens" defaultValue={1} isOptional={true} min={0} max={999} step={1} precision={0}></CmpNum>
           </Collapse.Item>
@@ -113,7 +113,7 @@ function App() {
             <CmpNum ref={getRef()} id="unit" title="Unit" defaultValue={8} min={1} max={8} step={1} precision={0} isOptional={true} enable={false} isExtraArg={true} />
           </Collapse.Item>
 
-          <Collapse.Item name="8" header="分层训练">
+          <Collapse.Item name="9" header="分层训练">
             <CmpSwitch ref={getRef()} id="network_args" title="Network Args" isOptional={true} enable={false} />
             <CmpText ref={getRef()} id="block_dims" title="block_dims" defaultValue="2,2,2,2,4,4,4,4,6,6,6,6,8,6,6,6,6,4,4,4,4,2,2,2,2" isOptional={true} enable={false} isExtraArg={true}></CmpText>
             <CmpText ref={getRef()} id="block_alphas" title="block_alphas" defaultValue="2,2,2,2,4,4,4,4,6,6,6,6,8,6,6,6,6,4,4,4,4,2,2,2,2" isOptional={true} enable={false} isExtraArg={true}></CmpText>
