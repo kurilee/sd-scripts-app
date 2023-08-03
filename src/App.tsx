@@ -4,6 +4,8 @@ import { CmpBaseRef, CmpFile, CmpFolder, CmpText, CmpSwitch, CmpCombox, CmpNum }
 import { useEffect, useRef, useState } from 'react';
 import './App.css';
 
+// 模型类型
+const loraType = ['networks.lora', 'networks.dylora']
 // 优化器选项
 const optTypes = ['AdamW', 'AdamW8bit', 'Lion', 'SGDNesterov', 'SGDNesterov8bit', 'DAdaptation', 'AdaFactor', 'Prodigy'];
 // 学习策略
@@ -65,8 +67,8 @@ function App() {
 
           <Collapse.Item name="3" header="基本设置">
             <CmpText ref={getRef()} id="resolution" title="Resolution" defaultValue="512,512"></CmpText>
+            <CmpCombox ref={getRef()} id="network_module" title="Network Module" defaultValue={loraType[0]} options={loraType}></CmpCombox>
             <CmpCombox ref={getRef()} id="optimizer_type" title="Optimizer Type" defaultValue="Prodigy" options={optTypes}></CmpCombox>
-            <CmpText ref={getRef()} id="network_module" title="Network Module" defaultValue="networks.lora" enable={false}></CmpText>
             <CmpNum ref={getRef()} id="max_train_epochs" title="Max Train Epochs" defaultValue={10} min={1} max={1000} step={1} precision={0}></CmpNum>
             <CmpNum ref={getRef()} id="learning_rate" title="Learning Rate" defaultValue={1.0} min={0.00001} max={1.0} step={0.00001} precision={5}></CmpNum>
             <CmpNum ref={getRef()} id="unet_lr" title="UNet Lr" defaultValue={1.0} min={0.00001} max={1.0} step={0.00001} precision={5}></CmpNum>
@@ -104,8 +106,28 @@ function App() {
             <CmpNum ref={getRef()} id="min_snr_gamma" title="Min Snr Gamma" enable={false} defaultValue={5} isOptional={true} min={0} max={10} step={1} precision={0}></CmpNum>
           </Collapse.Item>
 
-          <Collapse.Item name="8" header="分层训练">
+          <Collapse.Item name="8" header="Lycoris">
+            <CmpSwitch ref={getRef()} id="network_args" title="Network Args" isOptional={true} enable={false} />
+            <CmpNum ref={getRef()} id="conv_dim" title="Conv Dim" defaultValue={32} min={1} max={32} step={1} precision={0} isOptional={true} enable={false} isExtraArg={true} />
+            <CmpNum ref={getRef()} id="conv_alpha" title="Conv Alpha" defaultValue={32} min={1} max={32} step={1} precision={0} isOptional={true} enable={false} isExtraArg={true} />
+            <CmpNum ref={getRef()} id="unit" title="Unit" defaultValue={8} min={1} max={8} step={1} precision={0} isOptional={true} enable={false} isExtraArg={true} />
           </Collapse.Item>
+
+          <Collapse.Item name="8" header="分层训练">
+            <CmpSwitch ref={getRef()} id="network_args" title="Network Args" isOptional={true} enable={false} />
+            <CmpText ref={getRef()} id="block_dims" title="block_dims" defaultValue="2,2,2,2,4,4,4,4,6,6,6,6,8,6,6,6,6,4,4,4,4,2,2,2,2" isOptional={true} enable={false} isExtraArg={true}></CmpText>
+            <CmpText ref={getRef()} id="block_alphas" title="block_alphas" defaultValue="2,2,2,2,4,4,4,4,6,6,6,6,8,6,6,6,6,4,4,4,4,2,2,2,2" isOptional={true} enable={false} isExtraArg={true}></CmpText>
+            <CmpText ref={getRef()} id="conv_block_dims" title="conv_block_dims" defaultValue="2,2,2,2,4,4,4,4,6,6,6,6,8,6,6,6,6,4,4,4,4,2,2,2,2" isOptional={true} enable={false} isExtraArg={true}></CmpText>
+            <CmpText ref={getRef()} id="conv_block_alphas" title="conv_block_alphas" defaultValue="2,2,2,2,4,4,4,4,6,6,6,6,8,6,6,6,6,4,4,4,4,2,2,2,2" isOptional={true} enable={false} isExtraArg={true}></CmpText>
+            <CmpText ref={getRef()} id="down_lr_weight" title="down_lr_weight" defaultValue="1,1,1,1,1,1,1,1,1,1,1,1" isOptional={true} enable={false} isExtraArg={true}></CmpText>
+            <CmpText ref={getRef()} id="mid_lr_weight" title="mid_lr_weight" defaultValue="1.0" isOptional={true} enable={false} isExtraArg={true}></CmpText>
+            <CmpText ref={getRef()} id="up_lr_weight" title="up_lr_weight" defaultValue="1,1,1,1,1,1,1,1,1,1,1,1" isOptional={true} enable={false} isExtraArg={true}></CmpText>
+            <CmpText ref={getRef()} id="block_lr_zero_threshold" title="down_lr_weight" defaultValue="0.1" isOptional={true} enable={false} isExtraArg={true}></CmpText>
+            <CmpText ref={getRef()} id="down_lr_weight" title="down_lr_weight" defaultValue="sine+.5" isOptional={true} enable={false} isExtraArg={true}></CmpText>
+            <CmpText ref={getRef()} id="mid_lr_weight" title="down_lr_weight" defaultValue="1.5" isOptional={true} enable={false} isExtraArg={true}></CmpText>
+            <CmpText ref={getRef()} id="up_lr_weight" title="down_lr_weight" defaultValue="cosine+.5" isOptional={true} enable={false} isExtraArg={true}></CmpText>
+          </Collapse.Item>
+
           </Collapse>
         </Grid.Col>
         <Grid.Col span={10}>

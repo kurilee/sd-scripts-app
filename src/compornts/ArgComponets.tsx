@@ -24,6 +24,7 @@ export interface CmpBase<T> {
   enable?: boolean;
   isOptional?: boolean;
   defaultValue?: T;
+  isExtraArg?: boolean;
 }
 export interface CmpFileProps extends CmpBase<string> {
   filters: Array<{ name: string; extensions: Array<string> }>;
@@ -74,7 +75,7 @@ const CmpFile = forwardRef<CmpBaseRef, CmpFileProps>((props, ref) => {
 
   useImperativeHandle(ref, () => ({
     getArgumentString: () => {
-      return isOptional && !enable ? '' : `--${props.id}=${value}`;
+      return isOptional && !enable ? '' : (props.isExtraArg ? `\"${props.id}=${value}\"` : `--${props.id}=${value}`);
     },
   }));
 
@@ -124,7 +125,7 @@ const CmpFolder = forwardRef<CmpBaseRef, CmpFolderProps>((props, ref) => {
 
   useImperativeHandle(ref, () => ({
     getArgumentString: () => {
-      return isOptional && !enable ? '' : `--${props.id}=${value}`;
+      return isOptional && !enable ? '' : (props.isExtraArg ? `\"${props.id}=${value}\"` : `--${props.id}=${value}`);
     },
   }));
 
@@ -181,7 +182,7 @@ const CmpText = forwardRef<CmpBaseRef, CmpTextProps>((props, ref) => {
 
   useImperativeHandle(ref, () => ({
     getArgumentString: () => {
-      return isOptional && !enable ? '' : `--${props.id}=${value}`;
+      return isOptional && !enable ? '' : (props.isExtraArg ? `\"${props.id}=${value}\"` : `--${props.id}=${value}`);
     },
   }));
 
@@ -218,7 +219,7 @@ const CmpSwitch = forwardRef<CmpBaseRef, CmpSwitchProps>((props, ref) => {
 
   useImperativeHandle(ref, () => ({
     getArgumentString: () => {
-      return isOptional && !enable ? '' : `--${props.id}`;
+      return isOptional && !enable ? '' : (props.isExtraArg ? `\"${props.id}=${value}\"` : `--${props.id}`);
     },
   }));
 
@@ -251,7 +252,7 @@ const CmpCombox = forwardRef<CmpBaseRef, CmpComboxProps>((props, ref) => {
 
   useImperativeHandle(ref, () => ({
     getArgumentString: () => {
-      return isOptional && !enable ? '' : `--${props.id}=${value}`;
+      return isOptional && !enable ? '' : (props.isExtraArg ? `\"${props.id}=${value}\"` : `--${props.id}=${value}`);
     },
   }));
 
@@ -298,7 +299,7 @@ const CmpNum = forwardRef<CmpBaseRef, CmpNumProps>((props, ref) => {
 
   useImperativeHandle(ref, () => ({
     getArgumentString: () => {
-      return isOptional && !enable ? '' : `--${props.id}=${inputRef.current?.dom.value}`;
+      return isOptional && !enable ? '' : (props.isExtraArg ? `\"${props.id}=${inputRef.current?.dom.value}\"` : `--${props.id}=${inputRef.current?.dom.value}`);
     },
   }));
 
