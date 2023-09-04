@@ -15,28 +15,7 @@
       "all": false,
       "shell": {
         "all": true,
-        "scope": [
-          {
-            "name": "active-venv",
-            "cmd": ".\\venv\\Scripts\\activate",
-            "args": []
-          },
-          {
-            "name": "create-venv",
-            "cmd": "python",
-            "args": ["-m", "venv", "venv"]
-          },
-          {
-            "name": "pwd",
-            "cmd": "pwd",
-            "args": []
-          },
-          {
-            "name": "train",
-            "cmd": "python -m accelerate.commands.launch --num_cpu_threads_per_process=8 train_network.py",
-            "args": []
-          }
-        ]
+        "scope": []
       },
       "path": {
         "all": true
@@ -48,6 +27,9 @@
         "message": false,
         "open": true,
         "save": false
+      },
+      "clipboard": {
+        "all": true
       }
     },
     "bundle": {

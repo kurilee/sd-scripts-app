@@ -1,23 +1,24 @@
-import { Collapse, Space, Button, Typography, Grid } from '@arco-design/web-react';
+import { Collapse, Space, Button, Input, Grid } from '@arco-design/web-react';
 import { CmpBaseRef, CmpFile, CmpFolder, CmpText, CmpSwitch, CmpCombox, CmpNum } from './compornts/ArgComponets';
-// import { appDataDir, resourceDir } from '@tauri-apps/api/path';
 import { useEffect, useRef, useState } from 'react';
 import './App.css';
+import { clipboard } from '@tauri-apps/api';
 
 // 模型类型
-const loraType = ['networks.lora', 'networks.dylora']
+const loraType = ['networks.lora', 'networks.dylora', 'networks.lora_fa']
 // 优化器选项
 const optTypes = ['AdamW', 'AdamW8bit', 'Lion', 'SGDNesterov', 'SGDNesterov8bit', 'DAdaptation', 'AdaFactor', 'Prodigy'];
 // 学习策略
 const lrSchedulers = ['linear', 'cosine', 'cosine_with_restarts', 'polynomial', 'constant', 'constant_with_warmup', 'adafactor'];
 // 预览生成采样器
 const samplerTypes = ['ddim', 'pndm', 'lms', 'euler', 'euler_a', 'heun', 'dpm_2', 'dpm_2_a', 'dpmsolver', 'dpmsolver++', 'dpmsingle', 'k_lms', 'k_euler', 'k_euler_a', 'k_dpm_2', 'k_dpm_2_a'];
+// 格式
+const fomats = ['fp16', 'bf16'];
 
 function App() {
   const [result, setResult] = useState('');
   const refs: Array<React.RefObject<CmpBaseRef>> = [];
   useEffect(() => {
-    // resourceDir().then(setResult);
   }, []);
 
   // 创建控件引用
@@ -36,6 +37,18 @@ function App() {
       }
     });
     setResult(cmd);
+    clipboard.writeText(cmd);
+  };
+
+  const createCommand_xl = (): void => {
+    var cmd = 'python -m accelerate.commands.launch --num_cpu_threads_per_process=8 sdxl_train_network.py ';
+    refs.map((ref) => {
+      if (ref.current != null) {
+        cmd += ref.current.getArgumentString() + ' ';
+      }
+    });
+    setResult(cmd);
+    clipboard.writeText(cmd);
   };
 
   return (
@@ -53,19 +66,28 @@ function App() {
             <CmpFolder ref={getRef()} id="logging_dir" title="Logging Dir" defaultPath={'D:\\LoraTrainData\\output\\'} isOptional={true} enable={false}></CmpFolder>
           </Collapse.Item>
 
-          <Collapse.Item name="2" header="不常用的设置">
+          <Collapse.Item name="2" header="基本设置">
             <CmpSwitch ref={getRef()} id="xformers" title="Xformers" defaultValue={true} isOptional={true}></CmpSwitch>
             <CmpSwitch ref={getRef()} id="enable_bucket" title="Enable Bucket" defaultValue={true} isOptional={true}></CmpSwitch>
             <CmpSwitch ref={getRef()} id="cache_latents" title="Cache Latents" defaultValue={true} isOptional={true}></CmpSwitch>
+            <CmpSwitch ref={getRef()} id="cache_latents_to_disk" title="Cache Latents To Disk" defaultValue={true} isOptional={true}></CmpSwitch>
+            <CmpSwitch ref={getRef()} id="cache_text_encoder_outputs" title="Cache Text Encoder Outputs" enable={false} isOptional={true}></CmpSwitch>
+            <CmpSwitch ref={getRef()} id="cache_text_encoder_outputs_to_disk" title="Cache Text Encoder Outputs To Disk" enable={false} isOptional={true}></CmpSwitch>
             <CmpSwitch ref={getRef()} id="persistent_data_loader_workers" title="Persistent Data Loader Workers" defaultValue={true} isOptional={true}></CmpSwitch>
+            <CmpSwitch ref={getRef()} id="network_train_unet_only" title="Train UNet Only" enable={false} isOptional={true}></CmpSwitch>
+            <CmpSwitch ref={getRef()} id="no_half_vae" title="No Half VAE" enable={true} isOptional={true}></CmpSwitch>
             <CmpText ref={getRef()} id="save_model_as" title="Save Model As" defaultValue="safetensors" enable={false}></CmpText>
-            <CmpText ref={getRef()} id="mixed_precision" title="Mixed Precision" defaultValue="fp16" enable={false}></CmpText>
-            <CmpText ref={getRef()} id="save_precision" title="Save Precision" defaultValue="fp16" enable={false}></CmpText>
+            <CmpCombox ref={getRef()} id="mixed_precision" title="Mixed Precision" defaultValue="fp16" enable={true} options={fomats}></CmpCombox>
+            <CmpCombox ref={getRef()} id="save_precision" title="Save Precision" defaultValue="fp16" enable={true} options={fomats}></CmpCombox>
             <CmpText ref={getRef()} id="seed" title="seed" defaultValue="666" isOptional={true}></CmpText>
             <CmpNum ref={getRef()} id="clip_skip" title="Clip Skip" defaultValue={2} min={0} max={10} step={1} precision={0}></CmpNum>
+            <CmpSwitch ref={getRef()} id="full_bf16" title="Full bf16" enable={false} isOptional={true}></CmpSwitch>
+            <CmpSwitch ref={getRef()} id="full_fp16" title="Full fp16" enable={true} isOptional={true}></CmpSwitch>
+            <CmpText ref={getRef()} id="max_data_loader_n_workers" title="Max Data Loader" defaultValue='0' enable={false} isOptional={true} ></CmpText>
+            <CmpSwitch ref={getRef()} id="gradient_checkpointing" title="Gradient Checkpointing" enable={false} isOptional={true}></CmpSwitch>
           </Collapse.Item>
 
-          <Collapse.Item name="3" header="基本设置">
+          <Collapse.Item name="3" header="学习参数">
             <CmpText ref={getRef()} id="resolution" title="Resolution" defaultValue="512,512"></CmpText>
             <CmpCombox ref={getRef()} id="network_module" title="Network Module" defaultValue={loraType[0]} options={loraType}></CmpCombox>
             <CmpCombox ref={getRef()} id="optimizer_type" title="Optimizer Type" defaultValue="Prodigy" options={optTypes}></CmpCombox>
@@ -76,6 +98,7 @@ function App() {
             <CmpNum ref={getRef()} id="network_dim" title="Network Dim" defaultValue={32} min={1} max={128} step={1} precision={0}></CmpNum>
             <CmpNum ref={getRef()} id="network_alpha" title="Network Alpha" defaultValue={32} min={1} max={128} step={1} precision={0}></CmpNum>
             <CmpNum ref={getRef()} id="network_dropout" title="NetworkDropout" defaultValue={0.1} min={0.1} max={0.5} step={0.01} precision={2} isOptional={true} enable={false}></CmpNum>
+            <CmpNum ref={getRef()} id="scale_weight_norms" title='Scale Weigth Norms' defaultValue={1.0} min={0.01} max={2.0} step={0.01} precision={2} isOptional={true} enable={false}></CmpNum>
             <CmpNum ref={getRef()} id="train_batch_size" title="Train Batch Size" defaultValue={1} min={1} max={5} step={1} precision={0}></CmpNum>
           </Collapse.Item>
 
@@ -87,7 +110,7 @@ function App() {
 
           <Collapse.Item name="5" header="Tag相关参数">
             <CmpText ref={getRef()} id="caption_extension" title="Caption Extension" defaultValue=".txt"></CmpText>
-            <CmpNum ref={getRef()} id="max_token_length" title="Max Token Length" defaultValue={255} min={75} max={225} step={1} precision={0}></CmpNum>
+            <CmpNum ref={getRef()} id="max_token_length" title="Max Token Length" defaultValue={225} min={75} max={225} step={1} precision={0}></CmpNum>
             <CmpSwitch ref={getRef()} id="shuffle_caption" title="Shuffle Caption" defaultValue={true} isOptional={true}></CmpSwitch>
             <CmpNum ref={getRef()} id="keep_tokens" title="Keep Tokens" defaultValue={1} isOptional={true} min={0} max={999} step={1} precision={0}></CmpNum>
           </Collapse.Item>
@@ -99,7 +122,7 @@ function App() {
           </Collapse.Item>
 
           <Collapse.Item name="7" header="增强参数">
-            <CmpNum ref={getRef()} id="noise_offset" title="Noise Offset" enable={false} defaultValue={0.01} isOptional={true} min={0} max={1} step={0.001} precision={3}></CmpNum>
+            <CmpNum ref={getRef()} id="noise_offset" title="Noise Offset" enable={false} defaultValue={0.0357} isOptional={true} min={0} max={1} step={0.001} precision={3}></CmpNum>
             <CmpNum ref={getRef()} id="multires_noise_iterations" title="Multires Noise Iterations" enable={false} defaultValue={6} isOptional={true} min={0} max={10} step={1} precision={0}></CmpNum>
             <CmpNum ref={getRef()} id="multires_noise_discount" title="Multires Noise Discount" enable={false} defaultValue={0.3} isOptional={true} min={0.1} max={0.8} step={0.1} precision={1}></CmpNum>
             <CmpNum ref={getRef()} id="prior_loss_weight" title="Prior Loss Weight" enable={false} defaultValue={1} isOptional={true} min={0} max={1} step={0.01} precision={2}></CmpNum>
@@ -138,21 +161,17 @@ function App() {
               onClick={() => {
                 createCommand();
               }}>
-              生成命令
+              SD1.5
             </Button>
             <Button
               onClick={() => {
+                createCommand_xl();
               }}>
-              读取配置
-            </Button>
-            <Button
-              onClick={() => {
-              }}>
-              加载配置
+              SDXL
             </Button>
           </Space >
           <Space style={{ width: '100%' }}>
-            <Typography>{result}</Typography>
+            <Input.TextArea value={result} style={{ width: 500 }} autoSize onChange={(v, e) => { setResult(v) }}></Input.TextArea>
           </Space>
         </Space>
         </Grid.Col>
