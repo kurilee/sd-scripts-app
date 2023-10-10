@@ -60,6 +60,7 @@ function App() {
             <CmpFile ref={getRef()} id="pretrained_model_name_or_path" title="Model" filters={[{ name: 'Checkpoint', extensions: ['safetensors', 'ckpt', 'pt'] }]} defaultPath={'D:\\Projects\\stable-diffusion-webui\\models\\Stable-diffusion\\'}></CmpFile>
             <CmpFile ref={getRef()} id="vae" title="VAE" isOptional={true} enable={false} filters={[{ name: 'VAE', extensions: ['safetensors', 'ckpt', 'pt'] }]} defaultPath={'D:\\Projects\\stable-diffusion-webui\\models\\VAE\\'}></CmpFile>
             <CmpFolder ref={getRef()} id="train_data_dir" title="Train Data Dir" defaultPath={'D:\\LoraTrainData\\trains\\'}></CmpFolder>
+            <CmpFolder ref={getRef()} id="reg_data_dir" title="Reg Data Dir" defaultPath={'D:\\LoraTrainData\\trains\\'} isOptional={true} enable={false} ></CmpFolder>
             <CmpFolder ref={getRef()} id="output_dir" title="Output Dir" defaultPath={'D:\\LoraTrainData\\output\\'}></CmpFolder>
             <CmpText ref={getRef()} id="output_name" title="Output Name"></CmpText>         
             <CmpNum ref={getRef()} id="save_every_n_epochs" title="Save Every N Epochs" defaultValue={1} min={1} max={30} step={1} precision={0}></CmpNum>
@@ -67,22 +68,24 @@ function App() {
           </Collapse.Item>
 
           <Collapse.Item name="2" header="基本设置">
-            <CmpSwitch ref={getRef()} id="xformers" title="Xformers" defaultValue={true} isOptional={true}></CmpSwitch>
-            <CmpSwitch ref={getRef()} id="enable_bucket" title="Enable Bucket" defaultValue={true} isOptional={true}></CmpSwitch>
-            <CmpSwitch ref={getRef()} id="cache_latents" title="Cache Latents" defaultValue={true} isOptional={true}></CmpSwitch>
-            <CmpSwitch ref={getRef()} id="cache_latents_to_disk" title="Cache Latents To Disk" defaultValue={true} isOptional={true}></CmpSwitch>
+            <CmpSwitch ref={getRef()} id="xformers" title="Xformers" isOptional={true}></CmpSwitch>
+            <CmpSwitch ref={getRef()} id="mem_eff_attn" title="Memory efficient attention" isOptional={true} enable={false}></CmpSwitch>
+            <CmpSwitch ref={getRef()} id="enable_bucket" title="Enable Bucket" isOptional={true}></CmpSwitch>
+            <CmpSwitch ref={getRef()} id="cache_latents" title="Cache Latents" isOptional={true} enable={false}></CmpSwitch>
+            <CmpSwitch ref={getRef()} id="cache_latents_to_disk" title="Cache Latents To Disk" isOptional={true} enable={false}></CmpSwitch>
             <CmpSwitch ref={getRef()} id="cache_text_encoder_outputs" title="Cache Text Encoder Outputs" enable={false} isOptional={true}></CmpSwitch>
             <CmpSwitch ref={getRef()} id="cache_text_encoder_outputs_to_disk" title="Cache Text Encoder Outputs To Disk" enable={false} isOptional={true}></CmpSwitch>
             <CmpSwitch ref={getRef()} id="persistent_data_loader_workers" title="Persistent Data Loader Workers" defaultValue={true} isOptional={true}></CmpSwitch>
+            <CmpSwitch ref={getRef()} id="network_train_text_encoder_only" title="Train Text Encoder Only" enable={false} isOptional={true}></CmpSwitch>
             <CmpSwitch ref={getRef()} id="network_train_unet_only" title="Train UNet Only" enable={false} isOptional={true}></CmpSwitch>
             <CmpSwitch ref={getRef()} id="no_half_vae" title="No Half VAE" enable={true} isOptional={true}></CmpSwitch>
             <CmpText ref={getRef()} id="save_model_as" title="Save Model As" defaultValue="safetensors" enable={false}></CmpText>
-            <CmpCombox ref={getRef()} id="mixed_precision" title="Mixed Precision" defaultValue="fp16" enable={true} options={fomats}></CmpCombox>
-            <CmpCombox ref={getRef()} id="save_precision" title="Save Precision" defaultValue="fp16" enable={true} options={fomats}></CmpCombox>
+            <CmpCombox ref={getRef()} id="mixed_precision" title="Mixed Precision" defaultValue="bf16" enable={true} options={fomats}></CmpCombox>
+            <CmpCombox ref={getRef()} id="save_precision" title="Save Precision" defaultValue="bf16" enable={true} options={fomats}></CmpCombox>
             <CmpText ref={getRef()} id="seed" title="seed" defaultValue="666" isOptional={true}></CmpText>
             <CmpNum ref={getRef()} id="clip_skip" title="Clip Skip" defaultValue={2} min={0} max={10} step={1} precision={0}></CmpNum>
-            <CmpSwitch ref={getRef()} id="full_bf16" title="Full bf16" enable={false} isOptional={true}></CmpSwitch>
-            <CmpSwitch ref={getRef()} id="full_fp16" title="Full fp16" enable={true} isOptional={true}></CmpSwitch>
+            <CmpSwitch ref={getRef()} id="full_bf16" title="Full bf16" enable={true} isOptional={true}></CmpSwitch>
+            <CmpSwitch ref={getRef()} id="full_fp16" title="Full fp16" enable={false} isOptional={true}></CmpSwitch>
             <CmpText ref={getRef()} id="max_data_loader_n_workers" title="Max Data Loader" defaultValue='0' enable={false} isOptional={true} ></CmpText>
             <CmpSwitch ref={getRef()} id="gradient_checkpointing" title="Gradient Checkpointing" enable={false} isOptional={true}></CmpSwitch>
           </Collapse.Item>
@@ -96,29 +99,30 @@ function App() {
             <CmpNum ref={getRef()} id="unet_lr" title="UNet Lr" defaultValue={1.0} min={0.00001} max={1.0} step={0.00001} precision={5}></CmpNum>
             <CmpNum ref={getRef()} id="text_encoder_lr" title="Text Encord Lr" defaultValue={1.0} min={0.00001} max={1.0} step={0.00001} precision={5}></CmpNum>
             <CmpNum ref={getRef()} id="network_dim" title="Network Dim" defaultValue={32} min={1} max={128} step={1} precision={0}></CmpNum>
-            <CmpNum ref={getRef()} id="network_alpha" title="Network Alpha" defaultValue={32} min={1} max={128} step={1} precision={0}></CmpNum>
+            <CmpNum ref={getRef()} id="network_alpha" title="Network Alpha" defaultValue={16} min={0} max={128} step={1} precision={0}></CmpNum>
             <CmpNum ref={getRef()} id="network_dropout" title="NetworkDropout" defaultValue={0.1} min={0.1} max={0.5} step={0.01} precision={2} isOptional={true} enable={false}></CmpNum>
             <CmpNum ref={getRef()} id="scale_weight_norms" title='Scale Weigth Norms' defaultValue={1.0} min={0.01} max={2.0} step={0.01} precision={2} isOptional={true} enable={false}></CmpNum>
             <CmpNum ref={getRef()} id="train_batch_size" title="Train Batch Size" defaultValue={1} min={1} max={5} step={1} precision={0}></CmpNum>
           </Collapse.Item>
 
           <Collapse.Item name="4" header="学习策略">
-            <CmpCombox ref={getRef()} id="lr_scheduler" title="Lr Scheduler" defaultValue="cosine_with_restarts" options={lrSchedulers} isOptional={true} enable={false}></CmpCombox>
+            <CmpCombox ref={getRef()} id="lr_scheduler" title="Lr Scheduler" defaultValue="constant" options={lrSchedulers} isOptional={true} enable={true}></CmpCombox>
             <CmpNum ref={getRef()} id="lr_warmup_steps" title="lr Warmup Steps" defaultValue={4} isOptional={true} min={1} max={30} step={0} precision={0} enable={false}></CmpNum>
             <CmpNum ref={getRef()} id="lr_scheduler_num_cycles" title="Lr Scheduler Num Cycles" defaultValue={4} isOptional={true} min={1} max={30} step={0} precision={0} enable={false}></CmpNum>
+            <CmpNum ref={getRef()} id="stop_text_encoder_training" title="Stop Text Encoder Training" defaultValue={0.5} isOptional={true} min={0} max={1} step={0.1} precision={2} enable={false}></CmpNum>
           </Collapse.Item>
 
           <Collapse.Item name="5" header="Tag相关参数">
             <CmpText ref={getRef()} id="caption_extension" title="Caption Extension" defaultValue=".txt"></CmpText>
             <CmpNum ref={getRef()} id="max_token_length" title="Max Token Length" defaultValue={225} min={75} max={225} step={1} precision={0}></CmpNum>
-            <CmpSwitch ref={getRef()} id="shuffle_caption" title="Shuffle Caption" defaultValue={true} isOptional={true}></CmpSwitch>
-            <CmpNum ref={getRef()} id="keep_tokens" title="Keep Tokens" defaultValue={1} isOptional={true} min={0} max={999} step={1} precision={0}></CmpNum>
+            <CmpSwitch ref={getRef()} id="shuffle_caption" title="Shuffle Caption" defaultValue={true} isOptional={true} enable={false}></CmpSwitch>
+            <CmpNum ref={getRef()} id="keep_tokens" title="Keep Tokens" defaultValue={1} isOptional={true} enable={false} min={0} max={999} step={1} precision={0}></CmpNum>
           </Collapse.Item>
 
           <Collapse.Item name="6" header="预览">
             <CmpNum ref={getRef()} id="sample_every_n_epochs" title="Sample Every N Epochs" enable={false} defaultValue={1} isOptional={true} min={0} max={300} step={1} precision={0}></CmpNum>
             <CmpFile ref={getRef()} id="sample_prompts" title="Sample Prompts" enable={false} defaultValue="" isOptional={true} filters={[{ name: 'Prompt', extensions: ['txt'] }]} defaultPath={'D:\\LoraTrainData\\trains\\'}></CmpFile>
-            <CmpCombox ref={getRef()} id="sample_sampler" title="Sample Sampler" enable={false} defaultValue="k_dpm_2_a" isOptional={true} options={samplerTypes}></CmpCombox>
+            <CmpCombox ref={getRef()} id="sample_sampler" title="Sample Sampler" enable={false} defaultValue="k_euler_a" isOptional={true} options={samplerTypes}></CmpCombox>
           </Collapse.Item>
 
           <Collapse.Item name="7" header="增强参数">
