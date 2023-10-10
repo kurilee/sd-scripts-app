@@ -14,6 +14,8 @@ const lrSchedulers = ['linear', 'cosine', 'cosine_with_restarts', 'polynomial', 
 const samplerTypes = ['ddim', 'pndm', 'lms', 'euler', 'euler_a', 'heun', 'dpm_2', 'dpm_2_a', 'dpmsolver', 'dpmsolver++', 'dpmsingle', 'k_lms', 'k_euler', 'k_euler_a', 'k_dpm_2', 'k_dpm_2_a'];
 // 格式
 const fomats = ['fp16', 'bf16'];
+//
+const logwithOptions = ['tensorboard', 'wandb', 'all']
 
 function App() {
   const [result, setResult] = useState('');
@@ -63,7 +65,9 @@ function App() {
             <CmpFolder ref={getRef()} id="reg_data_dir" title="Reg Data Dir" defaultPath={'D:\\LoraTrainData\\trains\\'} isOptional={true} enable={false} ></CmpFolder>
             <CmpFolder ref={getRef()} id="output_dir" title="Output Dir" defaultPath={'D:\\LoraTrainData\\output\\'}></CmpFolder>
             <CmpText ref={getRef()} id="output_name" title="Output Name"></CmpText>         
-            <CmpNum ref={getRef()} id="save_every_n_epochs" title="Save Every N Epochs" defaultValue={1} min={1} max={30} step={1} precision={0}></CmpNum>
+            <CmpNum ref={getRef()} id="save_every_n_epochs" title="Save Every N Epochs" defaultValue={1} min={1} max={30} step={1} precision={0} isOptional={true} enable={false}></CmpNum>
+            <CmpCombox ref={getRef()} id="log_with" title="Log With" defaultValue="wandb" options={logwithOptions} isOptional={true} enable={false}></CmpCombox>
+            <CmpText ref={getRef()} id="wandb_api_key" title="Wandb Api Key" defaultValue="39fb76fe3f1fd50febbfff17f0f1b738aa26e717" isOptional={true} enable={false}></CmpText>
             <CmpFolder ref={getRef()} id="logging_dir" title="Logging Dir" defaultPath={'D:\\LoraTrainData\\output\\'} isOptional={true} enable={false}></CmpFolder>
           </Collapse.Item>
 
@@ -95,28 +99,28 @@ function App() {
             <CmpCombox ref={getRef()} id="network_module" title="Network Module" defaultValue={loraType[0]} options={loraType}></CmpCombox>
             <CmpCombox ref={getRef()} id="optimizer_type" title="Optimizer Type" defaultValue="Prodigy" options={optTypes}></CmpCombox>
             <CmpNum ref={getRef()} id="max_train_epochs" title="Max Train Epochs" defaultValue={10} min={1} max={1000} step={1} precision={0}></CmpNum>
-            <CmpNum ref={getRef()} id="learning_rate" title="Learning Rate" defaultValue={1.0} min={0.00001} max={1.0} step={0.00001} precision={5}></CmpNum>
-            <CmpNum ref={getRef()} id="unet_lr" title="UNet Lr" defaultValue={1.0} min={0.00001} max={1.0} step={0.00001} precision={5}></CmpNum>
-            <CmpNum ref={getRef()} id="text_encoder_lr" title="Text Encord Lr" defaultValue={1.0} min={0.00001} max={1.0} step={0.00001} precision={5}></CmpNum>
+            <CmpNum ref={getRef()} id="learning_rate" title="Learning Rate" defaultValue={1.0} min={0.00001} max={1.0} step={0.00001} precision={5} isOptional={true} enable={true}></CmpNum>
+            <CmpNum ref={getRef()} id="unet_lr" title="UNet Lr" defaultValue={1.0} min={0.00001} max={1.0} step={0.00001} precision={5} isOptional={true} enable={false}></CmpNum>
+            <CmpNum ref={getRef()} id="text_encoder_lr" title="Text Encord Lr" defaultValue={1.0} min={0.00001} max={1.0} step={0.00001} precision={5} isOptional={true} enable={false}></CmpNum>
             <CmpNum ref={getRef()} id="network_dim" title="Network Dim" defaultValue={32} min={1} max={128} step={1} precision={0}></CmpNum>
             <CmpNum ref={getRef()} id="network_alpha" title="Network Alpha" defaultValue={16} min={0} max={128} step={1} precision={0}></CmpNum>
+            <CmpFolder ref={getRef()} id="network_weights" title="Network Weights" defaultPath={'D:\\LoraTrainData\\trains\\'} isOptional={true} enable={false} ></CmpFolder>
+            <CmpSwitch ref={getRef()} id="dim_from_weights" title="Dim From Weights" enable={false} isOptional={true}></CmpSwitch>
             <CmpNum ref={getRef()} id="network_dropout" title="NetworkDropout" defaultValue={0.1} min={0.1} max={0.5} step={0.01} precision={2} isOptional={true} enable={false}></CmpNum>
             <CmpNum ref={getRef()} id="scale_weight_norms" title='Scale Weigth Norms' defaultValue={1.0} min={0.01} max={2.0} step={0.01} precision={2} isOptional={true} enable={false}></CmpNum>
             <CmpNum ref={getRef()} id="train_batch_size" title="Train Batch Size" defaultValue={1} min={1} max={5} step={1} precision={0}></CmpNum>
           </Collapse.Item>
 
           <Collapse.Item name="4" header="学习策略">
-            <CmpCombox ref={getRef()} id="lr_scheduler" title="Lr Scheduler" defaultValue="constant" options={lrSchedulers} isOptional={true} enable={true}></CmpCombox>
+            <CmpCombox ref={getRef()} id="lr_scheduler" title="Lr Scheduler" defaultValue="constant" options={lrSchedulers} isOptional={true} enable={false}></CmpCombox>
             <CmpNum ref={getRef()} id="lr_warmup_steps" title="lr Warmup Steps" defaultValue={4} isOptional={true} min={1} max={30} step={0} precision={0} enable={false}></CmpNum>
             <CmpNum ref={getRef()} id="lr_scheduler_num_cycles" title="Lr Scheduler Num Cycles" defaultValue={4} isOptional={true} min={1} max={30} step={0} precision={0} enable={false}></CmpNum>
-            <CmpNum ref={getRef()} id="stop_text_encoder_training" title="Stop Text Encoder Training" defaultValue={0.5} isOptional={true} min={0} max={1} step={0.1} precision={2} enable={false}></CmpNum>
           </Collapse.Item>
 
           <Collapse.Item name="5" header="Tag相关参数">
             <CmpText ref={getRef()} id="caption_extension" title="Caption Extension" defaultValue=".txt"></CmpText>
             <CmpNum ref={getRef()} id="max_token_length" title="Max Token Length" defaultValue={225} min={75} max={225} step={1} precision={0}></CmpNum>
             <CmpSwitch ref={getRef()} id="shuffle_caption" title="Shuffle Caption" defaultValue={true} isOptional={true} enable={false}></CmpSwitch>
-            <CmpNum ref={getRef()} id="keep_tokens" title="Keep Tokens" defaultValue={1} isOptional={true} enable={false} min={0} max={999} step={1} precision={0}></CmpNum>
           </Collapse.Item>
 
           <Collapse.Item name="6" header="预览">
