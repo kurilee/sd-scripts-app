@@ -1,5 +1,6 @@
 import { Collapse, Space, Button, Input, Grid } from '@arco-design/web-react';
-import { CmpBaseRef, CmpFile, CmpFolder, CmpText, CmpSwitch, CmpCombox, CmpNum } from './compornts/ArgComponets';
+import { CmpBaseRef} from './compornts/ArgComponets';
+import { CmpFile, CmpFolder, CmpText, CmpSwitch, CmpCombox, CmpNum } from './compornts/Components';
 import { useEffect, useRef, useState } from 'react';
 import './App.css';
 import { clipboard } from '@tauri-apps/api';
