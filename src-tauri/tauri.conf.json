@@ -13,6 +13,10 @@
   "tauri": {
     "allowlist": {
       "all": false,
+      "shell": {
+        "all": true,
+        "scope": []
+      },
       "path": {
         "all": true
       },
@@ -23,6 +27,9 @@
         "message": false,
         "open": true,
         "save": false
+      },
+      "clipboard": {
+        "all": true
       }
     },
     "bundle": {
@@ -48,8 +55,8 @@
         "fullscreen": false,
         "resizable": true,
         "title": "sd-script-app",
-        "width": 800,
-        "height": 600
+        "width": 1280,
+        "height": 800
       }
     ]
   }

@@ -6,9 +6,14 @@ import { RefInputType } from '@arco-design/web-react/es/Input/interface';
 import { SelectHandle } from '@arco-design/web-react/es/Select/interface';
 import { appConfigDir } from '@tauri-apps/api/path';
 
+function getTypStyle(isOptional: boolean, isSwitch: boolean = false) {
+  var fix_style = { fontSize: 8 }
+  var width_style = isSwitch ? {} : (isOptional ? { width: titleWidth } : { width: fullTitleWidth })
+  return { ...fix_style, ...width_style }
+}
 // 常量属性
 const titleWidth = '124px';
-const fullTitleWidth = '172px';
+const fullTitleWidth = '160px';
 const valueWidth = '420px';
 
 // props
@@ -19,6 +24,7 @@ export interface CmpBase<T> {
   enable?: boolean;
   isOptional?: boolean;
   defaultValue?: T;
+  isExtraArg?: boolean;
 }
 export interface CmpFileProps extends CmpBase<string> {
   filters: Array<{ name: string; extensions: Array<string> }>;
@@ -69,16 +75,17 @@ const CmpFile = forwardRef<CmpBaseRef, CmpFileProps>((props, ref) => {
 
   useImperativeHandle(ref, () => ({
     getArgumentString: () => {
-      return isOptional && !enable ? '' : `--${props.id}=${value}`;
+      return isOptional && !enable ? '' : (props.isExtraArg ? `\"${props.id}=${value}\"` : `--${props.id}=${value}`);
     },
   }));
 
   return (
     <div>
       <Space style={{ margin: '2px' }}>
-        {isOptional && <Switch type="round" checked={enable} onChange={setEnable}></Switch>}
-        <Typography style={isOptional ? { width: titleWidth } : { width: fullTitleWidth }}>{title}</Typography>
+        {isOptional && <Switch size='small' type="round" checked={enable} onChange={setEnable}></Switch>}
+        <Typography style={getTypStyle(isOptional)}>{title}</Typography>
         <Input
+          size='mini'
           ref={inputRef}
           type="text"
           style={{ width: valueWidth }}
@@ -89,6 +96,7 @@ const CmpFile = forwardRef<CmpBaseRef, CmpFileProps>((props, ref) => {
             setValue(v);
           }}></Input>
         <Button
+          size='mini'
           disabled={!enable}
           onClick={async () => {
             await onOpenClicked();
@@ -117,7 +125,7 @@ const CmpFolder = forwardRef<CmpBaseRef, CmpFolderProps>((props, ref) => {
 
   useImperativeHandle(ref, () => ({
     getArgumentString: () => {
-      return isOptional && !enable ? '' : `--${props.id}=${value}`;
+      return isOptional && !enable ? '' : (props.isExtraArg ? `\"${props.id}=${value}\"` : `--${props.id}=${value}`);
     },
   }));
 
@@ -133,9 +141,10 @@ const CmpFolder = forwardRef<CmpBaseRef, CmpFolderProps>((props, ref) => {
   return (
     <div>
       <Space style={{ margin: '2px' }}>
-        {isOptional && <Switch type="round" checked={enable} onChange={setEnable}></Switch>}
-        <Typography style={isOptional ? { width: titleWidth } : { width: fullTitleWidth }}>{title}</Typography>
+        {isOptional && <Switch size='small' type="round" checked={enable} onChange={setEnable}></Switch>}
+        <Typography style={getTypStyle(isOptional)}>{title}</Typography>
         <Input
+          size='mini'
           ref={inputRef}
           type="text"
           style={{ width: valueWidth }}
@@ -144,6 +153,7 @@ const CmpFolder = forwardRef<CmpBaseRef, CmpFolderProps>((props, ref) => {
           defaultValue={defaultValue}
           onChange={(v) => setValue(v)}></Input>
         <Button
+          size='mini'
           disabled={!enable}
           onClick={async (e) => {
             await onOpenClicked();
@@ -172,16 +182,17 @@ const CmpText = forwardRef<CmpBaseRef, CmpTextProps>((props, ref) => {
 
   useImperativeHandle(ref, () => ({
     getArgumentString: () => {
-      return isOptional && !enable ? '' : `--${props.id}=${value}`;
+      return isOptional && !enable ? '' : (props.isExtraArg ? `\"${props.id}=${value}\"` : `--${props.id}=${value}`);
     },
   }));
 
   return (
     <div>
       <Space style={{ margin: '2px' }}>
-        {isOptional && <Switch type="round" checked={enable} onChange={setEnable}></Switch>}
-        <Typography style={isOptional ? { width: titleWidth } : { width: fullTitleWidth }}>{title}</Typography>
+        {isOptional && <Switch size='small' type="round" checked={enable} onChange={setEnable}></Switch>}
+        <Typography style={getTypStyle(isOptional)}>{title}</Typography>
         <Input
+          size='mini'
           ref={inputRef}
           type="text"
           style={{ width: valueWidth }}
@@ -208,15 +219,15 @@ const CmpSwitch = forwardRef<CmpBaseRef, CmpSwitchProps>((props, ref) => {
 
   useImperativeHandle(ref, () => ({
     getArgumentString: () => {
-      return isOptional && !enable ? '' : `--${props.id}`;
+      return isOptional && !enable ? '' : (props.isExtraArg ? `\"${props.id}=${value}\"` : `--${props.id}`);
     },
   }));
 
   return (
     <div>
       <Space style={{ margin: '2px' }}>
-        {isOptional && <Switch type="round" checked={enable} onChange={setEnable}></Switch>}
-        <Typography>{title}</Typography>
+        {isOptional && <Switch size="small" type="round" checked={enable} onChange={setEnable}></Switch>}
+        <Typography style={getTypStyle(isOptional, true)}>{title}</Typography>
       </Space>
     </div>
   );
@@ -241,16 +252,16 @@ const CmpCombox = forwardRef<CmpBaseRef, CmpComboxProps>((props, ref) => {
 
   useImperativeHandle(ref, () => ({
     getArgumentString: () => {
-      return isOptional && !enable ? '' : `--${props.id}=${value}`;
+      return isOptional && !enable ? '' : (props.isExtraArg ? `\"${props.id}=${value}\"` : `--${props.id}=${value}`);
     },
   }));
 
   return (
     <div>
       <Space style={{ margin: '2px' }}>
-        {isOptional && <Switch type="round" checked={enable} onChange={setEnable}></Switch>}
-        <Typography style={isOptional ? { width: titleWidth } : { width: fullTitleWidth }}>{title}</Typography>
-        <Select ref={selectRef} style={{ width: valueWidth }} disabled={!enable} value={value} defaultValue={defaultValue} onChange={(v) => setValue(v)}>
+        {isOptional && <Switch size='small' type="round" checked={enable} onChange={setEnable}></Switch>}
+        <Typography style={getTypStyle(isOptional)}>{title}</Typography>
+        <Select size='mini' ref={selectRef} style={{ width: valueWidth }} disabled={!enable} value={value} defaultValue={defaultValue} onChange={(v) => setValue(v)}>
           {options.map((opt, idx) => {
             return (
               <Select.Option key={idx.toString()} value={opt}>
@@ -288,16 +299,17 @@ const CmpNum = forwardRef<CmpBaseRef, CmpNumProps>((props, ref) => {
 
   useImperativeHandle(ref, () => ({
     getArgumentString: () => {
-      return isOptional && !enable ? '' : `--${props.id}=${inputRef.current?.dom.value}`;
+      return isOptional && !enable ? '' : (props.isExtraArg ? `\"${props.id}=${inputRef.current?.dom.value}\"` : `--${props.id}=${inputRef.current?.dom.value}`);
     },
   }));
 
   return (
     <div>
       <Space style={{ margin: '2px' }}>
-        {isOptional && <Switch type="round" checked={enable} onChange={setEnable}></Switch>}
-        <Typography style={isOptional ? { width: titleWidth } : { width: fullTitleWidth }}>{title}</Typography>
+        {isOptional && <Switch size='small' type="round" checked={enable} onChange={setEnable}></Switch>}
+        <Typography style={getTypStyle(isOptional)}>{title}</Typography>
         <InputNumber
+          size='mini'
           ref={inputRef}
           style={{ width: valueWidth }}
           mode="button"
