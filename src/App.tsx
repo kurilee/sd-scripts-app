@@ -1,6 +1,6 @@
 import { Collapse, Space, Button, Input, Grid } from '@arco-design/web-react';
 import { CmpBaseRef} from './compornts/ArgComponets';
-import { CmpFile, CmpFolder, CmpText, CmpSwitch, CmpCombox, CmpNum } from './compornts/Components';
+import { CmpFile, CmpFolder, CmpText, CmpSwitch, CmpCombox, CmpNum, BlockEditor } from './compornts/Components';
 import { useEffect, useRef, useState } from 'react';
 import './App.css';
 import { clipboard } from '@tauri-apps/api';
@@ -147,9 +147,9 @@ function App() {
 
           <Collapse.Item name="9" header="分层训练">
             <CmpSwitch ref={getRef()} id="network_args" title="Network Args" isOptional={true} enable={false} />
-            <CmpText ref={getRef()} id="block_dims" title="block_dims" defaultValue="2,2,2,2,4,4,4,4,6,6,6,6,8,6,6,6,6,4,4,4,4,2,2,2,2" isOptional={true} enable={false} isExtraArg={true}></CmpText>
-            <CmpText ref={getRef()} id="block_alphas" title="block_alphas" defaultValue="2,2,2,2,4,4,4,4,6,6,6,6,8,6,6,6,6,4,4,4,4,2,2,2,2" isOptional={true} enable={false} isExtraArg={true}></CmpText>
-            <CmpText ref={getRef()} id="conv_block_dims" title="conv_block_dims" defaultValue="2,2,2,2,4,4,4,4,6,6,6,6,8,6,6,6,6,4,4,4,4,2,2,2,2" isOptional={true} enable={false} isExtraArg={true}></CmpText>
+            <BlockEditor ref={getRef()} id="block_dims" title="block_dims" defaultValue="2,2,2,2,4,4,4,4,6,6,6,6,8,6,6,6,6,4,4,4,4,2,2,2,2" isOptional={true} enable={false} isExtraArg={true}/>
+            <BlockEditor ref={getRef()} id="block_alphas" title="block_alphas" defaultValue="2,2,2,2,4,4,4,4,6,6,6,6,8,6,6,6,6,4,4,4,4,2,2,2,2" isOptional={true} enable={false} isExtraArg={true}/>
+            {/* <CmpText ref={getRef()} id="conv_block_dims" title="conv_block_dims" defaultValue="2,2,2,2,4,4,4,4,6,6,6,6,8,6,6,6,6,4,4,4,4,2,2,2,2" isOptional={true} enable={false} isExtraArg={true}></CmpText>
             <CmpText ref={getRef()} id="conv_block_alphas" title="conv_block_alphas" defaultValue="2,2,2,2,4,4,4,4,6,6,6,6,8,6,6,6,6,4,4,4,4,2,2,2,2" isOptional={true} enable={false} isExtraArg={true}></CmpText>
             <CmpText ref={getRef()} id="down_lr_weight" title="down_lr_weight" defaultValue="1,1,1,1,1,1,1,1,1,1,1,1" isOptional={true} enable={false} isExtraArg={true}></CmpText>
             <CmpText ref={getRef()} id="mid_lr_weight" title="mid_lr_weight" defaultValue="1.0" isOptional={true} enable={false} isExtraArg={true}></CmpText>
@@ -157,7 +157,7 @@ function App() {
             <CmpText ref={getRef()} id="block_lr_zero_threshold" title="down_lr_weight" defaultValue="0.1" isOptional={true} enable={false} isExtraArg={true}></CmpText>
             <CmpText ref={getRef()} id="down_lr_weight" title="down_lr_weight" defaultValue="sine+.5" isOptional={true} enable={false} isExtraArg={true}></CmpText>
             <CmpText ref={getRef()} id="mid_lr_weight" title="down_lr_weight" defaultValue="1.5" isOptional={true} enable={false} isExtraArg={true}></CmpText>
-            <CmpText ref={getRef()} id="up_lr_weight" title="down_lr_weight" defaultValue="cosine+.5" isOptional={true} enable={false} isExtraArg={true}></CmpText>
+            <CmpText ref={getRef()} id="up_lr_weight" title="down_lr_weight" defaultValue="cosine+.5" isOptional={true} enable={false} isExtraArg={true}></CmpText> */}
           </Collapse.Item>
 
           </Collapse>
