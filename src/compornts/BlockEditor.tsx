@@ -63,6 +63,10 @@ const BlockEditor = forwardRef<CmpBaseRef, CmpTextProps>((props, ref) => {
     return ref;
   }
 
+  for (let i = 0; i < 25; ++i) {
+    createBlockCellRef();
+  }
+
   useEffect(() => {
     setTitle(props.title);
     setValue(props.defaultValue ?? '');
@@ -123,60 +127,60 @@ const BlockEditor = forwardRef<CmpBaseRef, CmpTextProps>((props, ref) => {
       >
             <Space direction='vertical'>
                 <Space direction='horizontal'>
-                    <BlockCell lb="IN0" defaultValue={0} enable={false} no={0} ref={createBlockCellRef()}/>
-                    <BlockCell lb="IN1" defaultValue={128} enable={true} no={1} ref={createBlockCellRef()}/>
-                    <BlockCell lb="IN2" defaultValue={128} enable={true} no={2} ref={createBlockCellRef()}/>
+                    <BlockCell lb="IN0" defaultValue={0} enable={false} no={0} ref={cellRefs[0]}/>
+                    <BlockCell lb="IN1" defaultValue={128} enable={true} no={1} ref={cellRefs[1]}/>
+                    <BlockCell lb="IN2" defaultValue={128} enable={true} no={2} ref={cellRefs[2]}/>
 
                     <div style={{width: '28em'}}></div>
-                    <BlockCell lb="OUT9" defaultValue={128} enable={true} no={22} ref={createBlockCellRef()}/>
-                    <BlockCell lb="OUT10" defaultValue={128} enable={true} no={23} ref={createBlockCellRef()}/>
-                    <BlockCell lb="OUT11" defaultValue={128} enable={true} no={24} ref={createBlockCellRef()}/>
+                    <BlockCell lb="OUT9" defaultValue={128} enable={true} no={22} ref={cellRefs[22]}/>
+                    <BlockCell lb="OUT10" defaultValue={128} enable={true} no={23} ref={cellRefs[23]}/>
+                    <BlockCell lb="OUT11" defaultValue={128} enable={true} no={24} ref={cellRefs[24]}/>
                 </Space>
                 <Space direction='horizontal'>
                     <div style={{width: '8.5em'}}></div>
-                    <BlockCell lb="IN3" defaultValue={0} enable={false} no={3} ref={createBlockCellRef()}/>
+                    <BlockCell lb="IN3" defaultValue={0} enable={false} no={3} ref={cellRefs[3]}/>
                 </Space>
                 <Space direction='horizontal'>
                     <div style={{width: '8.5em'}}></div>
-                    <BlockCell lb="IN4" defaultValue={128} enable={true} no={4} ref={createBlockCellRef()}/>
-                    <BlockCell lb="IN5" defaultValue={128} enable={true} no={5} ref={createBlockCellRef()}/>
+                    <BlockCell lb="IN4" defaultValue={128} enable={true} no={4} ref={cellRefs[4]}/>
+                    <BlockCell lb="IN5" defaultValue={128} enable={true} no={5} ref={cellRefs[5]}/>
 
                     <div style={{width: '19em'}}></div>
-                    <BlockCell lb="OUT6" defaultValue={128} enable={true} no={19} ref={createBlockCellRef()}/>
-                    <BlockCell lb="OUT7" defaultValue={128} enable={true} no={20} ref={createBlockCellRef()}/>
-                    <BlockCell lb="OUT8" defaultValue={128} enable={true} no={21} ref={createBlockCellRef()}/>
+                    <BlockCell lb="OUT6" defaultValue={128} enable={true} no={19} ref={cellRefs[19]}/>
+                    <BlockCell lb="OUT7" defaultValue={128} enable={true} no={20} ref={cellRefs[20]}/>
+                    <BlockCell lb="OUT8" defaultValue={128} enable={true} no={21} ref={cellRefs[21]}/>
                 </Space>
                 <Space direction='horizontal'>
                     <div style={{width: '13em'}}></div>
-                    <BlockCell lb="IN6" defaultValue={0} enable={false} no={6} ref={createBlockCellRef()}/>
+                    <BlockCell lb="IN6" defaultValue={0} enable={false} no={6} ref={cellRefs[6]}/>
                 </Space>
                 <Space direction='horizontal'>
                     <div style={{width: '13em'}}></div>
-                    <BlockCell lb="IN7" defaultValue={128} enable={true} no={7} ref={createBlockCellRef()}/>
-                    <BlockCell lb="IN8" defaultValue={128} enable={true} no={8} ref={createBlockCellRef()}/>
+                    <BlockCell lb="IN7" defaultValue={128} enable={true} no={7} ref={cellRefs[7]}/>
+                    <BlockCell lb="IN8" defaultValue={128} enable={true} no={8} ref={cellRefs[8]}/>
 
                     <div style={{width: '10em'}}></div>
-                    <BlockCell lb="OUT3" defaultValue={128} enable={true} no={16} ref={createBlockCellRef()}/>
-                    <BlockCell lb="OUT4" defaultValue={128} enable={true} no={17} ref={createBlockCellRef()}/>
-                    <BlockCell lb="OUT5" defaultValue={128} enable={true} no={18} ref={createBlockCellRef()}/>
+                    <BlockCell lb="OUT3" defaultValue={128} enable={true} no={16} ref={cellRefs[16]}/>
+                    <BlockCell lb="OUT4" defaultValue={128} enable={true} no={17} ref={cellRefs[17]}/>
+                    <BlockCell lb="OUT5" defaultValue={128} enable={true} no={18} ref={cellRefs[18]}/>
                 </Space>
                 <Space direction='horizontal'>
                     <div style={{width: '17.5em'}}></div>
-                    <BlockCell lb="IN9" defaultValue={0} enable={false} no={9} ref={createBlockCellRef()}/>
+                    <BlockCell lb="IN9" defaultValue={0} enable={false} no={9} ref={cellRefs[9]}/>
                 </Space>
                 <Space direction='horizontal'>
                     <div style={{width: '17.5em'}}></div>
-                    <BlockCell lb="IN10" defaultValue={0} enable={false} no={10} ref={createBlockCellRef()}/>
-                    <BlockCell lb="IN11" defaultValue={0} enable={false} no={11} ref={createBlockCellRef()}/>
+                    <BlockCell lb="IN10" defaultValue={0} enable={false} no={10} ref={cellRefs[10]}/>
+                    <BlockCell lb="IN11" defaultValue={0} enable={false} no={11} ref={cellRefs[11]}/>
 
                     <div style={{width: '1em'}}></div>
-                    <BlockCell lb="OUT0" defaultValue={0} enable={false} no={13} ref={createBlockCellRef()}/>
-                    <BlockCell lb="OUT1" defaultValue={0} enable={false} no={14} ref={createBlockCellRef()}/>
-                    <BlockCell lb="OUT2" defaultValue={0} enable={false} no={15} ref={createBlockCellRef()}/>
+                    <BlockCell lb="OUT0" defaultValue={0} enable={false} no={13} ref={cellRefs[13]}/>
+                    <BlockCell lb="OUT1" defaultValue={0} enable={false} no={14} ref={cellRefs[14]}/>
+                    <BlockCell lb="OUT2" defaultValue={0} enable={false} no={15} ref={cellRefs[15]}/>
                 </Space>
                 <Space direction='horizontal'>
                     <div style={{width: '25.5em'}}></div>
-                    <BlockCell lb="MID" defaultValue={128} enable={true} no={12} ref={createBlockCellRef()}/>
+                    <BlockCell lb="MID" defaultValue={128} enable={true} no={12} ref={cellRefs[12]}/>
                 </Space>
             </Space>
       </Modal>

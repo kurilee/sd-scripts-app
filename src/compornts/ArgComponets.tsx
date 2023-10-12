@@ -21,7 +21,7 @@ function getArgValue(id:string, value:string | undefined) {
 
 
 function getArgString(isOptional:boolean, enable:boolean, id:string, value:string | undefined, isExtra:boolean) {
-  let method = isExtra ? getArgValue : getArgValue;
+  let method = isExtra ? getArgExtra : getArgValue;
   return isOptional && !enable ? '' : method(id, value);
 }
 
