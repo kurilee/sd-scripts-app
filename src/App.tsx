@@ -147,8 +147,8 @@ function App() {
 
           <Collapse.Item name="9" header="分层训练">
             <CmpSwitch ref={getRef()} id="network_args" title="Network Args" isOptional={true} enable={false} />
-            <BlockEditor ref={getRef()} id="block_dims" title="block_dims" defaultValue="2,2,2,2,4,4,4,4,6,6,6,6,8,6,6,6,6,4,4,4,4,2,2,2,2" isOptional={true} enable={false} isExtraArg={true}/>
-            <BlockEditor ref={getRef()} id="block_alphas" title="block_alphas" defaultValue="2,2,2,2,4,4,4,4,6,6,6,6,8,6,6,6,6,4,4,4,4,2,2,2,2" isOptional={true} enable={false} isExtraArg={true}/>
+            <BlockEditor ref={getRef()} id="block_dims" title="block_dims" defaultValue="0,64,64,0,64,64,0,64,64,0,0,0,64,0,0,0,64,64,64,64,64,64,64,64,64" isOptional={true} enable={false} isExtraArg={true}/>
+            <BlockEditor ref={getRef()} id="block_alphas" title="block_alphas" defaultValue="0,32,32,0,32,32,0,32,32,0,0,0,32,0,0,0,32,32,32,32,32,32,32,32,32" isOptional={true} enable={false} isExtraArg={true}/>
             {/* <CmpText ref={getRef()} id="conv_block_dims" title="conv_block_dims" defaultValue="2,2,2,2,4,4,4,4,6,6,6,6,8,6,6,6,6,4,4,4,4,2,2,2,2" isOptional={true} enable={false} isExtraArg={true}></CmpText>
             <CmpText ref={getRef()} id="conv_block_alphas" title="conv_block_alphas" defaultValue="2,2,2,2,4,4,4,4,6,6,6,6,8,6,6,6,6,4,4,4,4,2,2,2,2" isOptional={true} enable={false} isExtraArg={true}></CmpText>
             <CmpText ref={getRef()} id="down_lr_weight" title="down_lr_weight" defaultValue="1,1,1,1,1,1,1,1,1,1,1,1" isOptional={true} enable={false} isExtraArg={true}></CmpText>
