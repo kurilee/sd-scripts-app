@@ -70,6 +70,7 @@ function App() {
             <CmpCombox ref={getRef()} id="log_with" title="Log With" defaultValue="wandb" options={logwithOptions} isOptional={true} enable={false}></CmpCombox>
             <CmpText ref={getRef()} id="wandb_api_key" title="Wandb Api Key" defaultValue="39fb76fe3f1fd50febbfff17f0f1b738aa26e717" isOptional={true} enable={false}></CmpText>
             <CmpFolder ref={getRef()} id="logging_dir" title="Logging Dir" defaultPath={'D:\\LoraTrainData\\output\\'} isOptional={true} enable={false}></CmpFolder>
+            <CmpSwitch ref={getRef()} id="no_metadata" title="No Metadata" isOptional={true} enable={true}></CmpSwitch>
           </Collapse.Item>
 
           <Collapse.Item name="2" header="基本设置">
