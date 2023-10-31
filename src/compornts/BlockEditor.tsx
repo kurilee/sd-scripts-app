@@ -125,6 +125,14 @@ const BlockEditor = forwardRef<CmpBaseRef, CmpTextProps>((props, ref) => {
     }
   };
 
+  const updateHalfBlockVal = (): void => {
+    for (var i = 0; i < cellRefs.length; i++) {
+      if (cellRefs[i].current != null && !Number.isNaN(cellRefs[i].current?.getValue())) {
+        cellRefs[i].current!.setValue(cellRefs[i].current!.getValue() * 0.5);
+      }
+    }
+  }
+
   return (
     <div>
       <Modal
@@ -297,6 +305,9 @@ const BlockEditor = forwardRef<CmpBaseRef, CmpTextProps>((props, ref) => {
               ></Slider>
             </Space>
           </Space>
+        </Space>
+        <Space>
+          <Button type="primary" onClick={() => { updateHalfBlockVal() }}>0.5</Button>
         </Space>
       </Modal>
       <Space style={{ margin: "2px" }}>
