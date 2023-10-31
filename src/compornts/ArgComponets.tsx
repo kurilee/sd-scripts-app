@@ -1,5 +1,5 @@
 function getTypStyle(isOptional: boolean, isSwitch: boolean = false) {
-  var fix_style = { fontSize: 8 };
+  var fix_style = { fontSize: 12 };
   var width_style = isSwitch ? {} : isOptional ? { width: titleWidth } : { width: fullTitleWidth };
   return { ...fix_style, ...width_style };
 }

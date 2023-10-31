@@ -302,7 +302,7 @@ const BlockEditor = forwardRef<CmpBaseRef, CmpTextProps>((props, ref) => {
       <Space style={{ margin: "2px" }}>
         {isOptional && <Switch size="small" type="round" checked={enable} onChange={setEnable}></Switch>}
         <Typography style={ComponentUtils.getTypStyle(isOptional)}>{title}</Typography>
-        <Input size="mini" readOnly={true} ref={inputRef} type="text" style={{ width: ComponentUtils.valueWidth }} disabled={!enable} value={value} defaultValue={defaultValue} onChange={(v) => setValue(v)}></Input>
+        <Input size="mini" ref={inputRef} type="text" style={{ width: ComponentUtils.valueWidth }} disabled={!enable} value={value} defaultValue={defaultValue} onChange={(v) => setValue(v)}></Input>
         <Button
           size="mini"
           disabled={!enable}

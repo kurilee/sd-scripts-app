@@ -83,7 +83,7 @@ function App() {
             <CmpSwitch ref={getRef()} id="cache_text_encoder_outputs_to_disk" title="Cache Text Encoder Outputs To Disk" enable={false} isOptional={true}></CmpSwitch>
             <CmpSwitch ref={getRef()} id="persistent_data_loader_workers" title="Persistent Data Loader Workers" defaultValue={true} isOptional={true}></CmpSwitch>
             <CmpSwitch ref={getRef()} id="network_train_text_encoder_only" title="Train Text Encoder Only" enable={false} isOptional={true}></CmpSwitch>
-            <CmpSwitch ref={getRef()} id="network_train_unet_only" title="Train UNet Only" enable={false} isOptional={true}></CmpSwitch>
+            <CmpSwitch ref={getRef()} id="network_train_unet_only" title="Train UNet Only" enable={true} isOptional={true}></CmpSwitch>
             <CmpSwitch ref={getRef()} id="no_half_vae" title="No Half VAE" enable={true} isOptional={true}></CmpSwitch>
             <CmpText ref={getRef()} id="save_model_as" title="Save Model As" defaultValue="safetensors" enable={false}></CmpText>
             <CmpCombox ref={getRef()} id="mixed_precision" title="Mixed Precision" defaultValue="bf16" enable={true} options={fomats}></CmpCombox>
@@ -106,7 +106,7 @@ function App() {
             <CmpNum ref={getRef()} id="text_encoder_lr" title="Text Encord Lr" defaultValue={1.0} min={0.00001} max={1.0} step={0.00001} precision={5} isOptional={true} enable={false}></CmpNum>
             <CmpNum ref={getRef()} id="network_dim" title="Network Dim" defaultValue={32} min={1} max={128} step={1} precision={0}></CmpNum>
             <CmpNum ref={getRef()} id="network_alpha" title="Network Alpha" defaultValue={16} min={0} max={128} step={1} precision={0}></CmpNum>
-            <CmpFolder ref={getRef()} id="network_weights" title="Network Weights" defaultPath={'D:\\LoraTrainData\\trains\\'} isOptional={true} enable={false} ></CmpFolder>
+            <CmpFile ref={getRef()} id="network_weights" title="Network Weights" defaultPath={'D:\\LoraTrainData\\output\\'} isOptional={true} enable={false} filters={[{ name: 'Checkpoint', extensions: ['safetensors', 'ckpt', 'pt'] }]}></CmpFile>
             <CmpSwitch ref={getRef()} id="dim_from_weights" title="Dim From Weights" enable={false} isOptional={true}></CmpSwitch>
             <CmpNum ref={getRef()} id="network_dropout" title="NetworkDropout" defaultValue={0.1} min={0.1} max={0.5} step={0.01} precision={2} isOptional={true} enable={false}></CmpNum>
             <CmpNum ref={getRef()} id="scale_weight_norms" title='Scale Weigth Norms' defaultValue={1.0} min={0.01} max={2.0} step={0.01} precision={2} isOptional={true} enable={false}></CmpNum>
@@ -123,6 +123,7 @@ function App() {
             <CmpText ref={getRef()} id="caption_extension" title="Caption Extension" defaultValue=".txt"></CmpText>
             <CmpNum ref={getRef()} id="max_token_length" title="Max Token Length" defaultValue={225} min={75} max={225} step={1} precision={0}></CmpNum>
             <CmpSwitch ref={getRef()} id="shuffle_caption" title="Shuffle Caption" defaultValue={true} isOptional={true} enable={false}></CmpSwitch>
+            <CmpNum ref={getRef()} id="keep_tokens" title="Keep Tokens" defaultValue={1} isOptional={true} enable={false} min={1} max={225} step={1} precision={0} />
           </Collapse.Item>
 
           <Collapse.Item name="6" header="预览">
