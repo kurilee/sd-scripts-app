@@ -92,6 +92,7 @@ function App() {
             <CmpNum ref={getRef()} id="clip_skip" title="Clip Skip" defaultValue={2} min={0} max={10} step={1} precision={0}></CmpNum>
             <CmpSwitch ref={getRef()} id="full_bf16" title="Full bf16" enable={true} isOptional={true}></CmpSwitch>
             <CmpSwitch ref={getRef()} id="full_fp16" title="Full fp16" enable={false} isOptional={true}></CmpSwitch>
+            <CmpSwitch ref={getRef()} id="fp8_base" title="FP8 Base" enable={false} isOptional={true}></CmpSwitch>
             <CmpText ref={getRef()} id="max_data_loader_n_workers" title="Max Data Loader" defaultValue='0' enable={false} isOptional={true} ></CmpText>
             <CmpSwitch ref={getRef()} id="gradient_checkpointing" title="Gradient Checkpointing" enable={false} isOptional={true}></CmpSwitch>
           </Collapse.Item>
@@ -124,6 +125,7 @@ function App() {
             <CmpNum ref={getRef()} id="max_token_length" title="Max Token Length" defaultValue={225} min={75} max={225} step={1} precision={0}></CmpNum>
             <CmpSwitch ref={getRef()} id="shuffle_caption" title="Shuffle Caption" defaultValue={true} isOptional={true} enable={false}></CmpSwitch>
             <CmpNum ref={getRef()} id="keep_tokens" title="Keep Tokens" defaultValue={1} isOptional={true} enable={false} min={1} max={225} step={1} precision={0} />
+            <CmpNum ref={getRef()} id="caption_dropout_rate" title="Caption Dropout Rate" defaultValue={1} isOptional={true} enable={false} min={0} max={1} step={0.01} precision={2} />
           </Collapse.Item>
 
           <Collapse.Item name="6" header="预览">
