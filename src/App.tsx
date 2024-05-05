@@ -1,9 +1,10 @@
 import { Collapse, Space, Button, Input, Grid } from '@arco-design/web-react';
-import { CmpBaseRef} from './compornts/ArgComponets';
+import { CmpBaseRef } from './compornts/ArgComponets';
 import { CmpFile, CmpFolder, CmpText, CmpSwitch, CmpCombox, CmpNum, BlockEditor } from './compornts/Components';
 import { useEffect, useRef, useState } from 'react';
 import './App.css';
 import { clipboard } from '@tauri-apps/api';
+import { Command, SpawnOptions } from '@tauri-apps/api/shell';
 
 // 模型类型
 const loraType = ['networks.lora', 'networks.dylora', 'networks.lora_fa']
@@ -33,26 +34,39 @@ function App() {
 
   // 生成命令
   const createCommand = (): void => {
-    var cmd = 'python -m accelerate.commands.launch --num_cpu_threads_per_process=8 train_network.py ';
+    var cmd = 'D:\\Projects\\sd-scripts\\venv\\Scripts\\python.exe -m accelerate.commands.launch --num_cpu_threads_per_process=8 D:\\Projects\\sd-scripts\\train_network.py ';
+    // var cmd = 'D:/Projects/sd-scripts/train_network.py ';
     refs.map((ref) => {
       if (ref.current != null) {
-        cmd += ref.current.getArgumentString() + ' ';
+        var arg_str = ref.current.getArgumentString();
+        if (arg_str.length > 0) {
+          cmd += ref.current.getArgumentString().trimEnd() + ' ';
+        }
       }
     });
     setResult(cmd);
     clipboard.writeText(cmd);
   };
 
-  const createCommand_xl = (): void => {
-    var cmd = 'python -m accelerate.commands.launch --num_cpu_threads_per_process=8 sdxl_train_network.py ';
+  const createCommand_xl = async () => {
+    var cmd = 'D:\\Projects\\sd-scripts\\venv\\Scripts\\python.exe -m accelerate.commands.launch --num_cpu_threads_per_process=8 D:\\Projects\\sd-scripts\\sdxl_train_network.py ';
     refs.map((ref) => {
       if (ref.current != null) {
-        cmd += ref.current.getArgumentString() + ' ';
+        var arg_str = ref.current.getArgumentString();
+        if (arg_str.length > 0) {
+          cmd += ref.current.getArgumentString().trimEnd() + ' ';
+        }
       }
     });
     setResult(cmd);
     clipboard.writeText(cmd);
   };
+
+  const run = async () => {
+    console.log(`/c start cmd /k ${result.trimEnd()}`);
+    var cmd = new Command("start cmd", `/c start cmd /k ${result.trimEnd()}`);
+    var output = await cmd.execute();
+  }
 
   return (
     <div style={{ padding: '5px'}}>
@@ -182,6 +196,7 @@ function App() {
               }}>
               SDXL
             </Button>
+            <Button type="primary" onClick={() => { run() }}> Run </Button>
           </Space >
           <Space style={{ width: '100%' }}>
             <Input.TextArea value={result} style={{ width: 500 }} autoSize onChange={(v, e) => { setResult(v) }}></Input.TextArea>

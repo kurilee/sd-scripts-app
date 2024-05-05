@@ -15,7 +15,11 @@
       "all": false,
       "shell": {
         "all": true,
-        "scope": []
+        "execute": true,
+        "sidecar": true,
+        "scope": [ 
+          { "name": "start cmd", "cmd": "cmd", "args": true }
+        ]
       },
       "path": {
         "all": true
