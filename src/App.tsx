@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import './App.css';
 import { clipboard } from '@tauri-apps/api';
 import { Command } from '@tauri-apps/api/shell';
+import { randomInt } from 'crypto';
 
 // 模型类型
 const loraType = ['networks.lora', 'networks.dylora', 'networks.lora_fa']
@@ -18,10 +19,13 @@ const samplerTypes = ['ddim', 'pndm', 'lms', 'euler', 'euler_a', 'heun', 'dpm_2'
 const fomats = ['fp16', 'bf16'];
 //
 const logwithOptions = ['tensorboard', 'wandb', 'all']
+//
+const script_name = ["train_network.py", "train_network_xl.py"]
 
 function App() {
   const [result, setResult] = useState('');
   const sdHomeRef = useRef<CmpBaseRef>(null);
+  const sdScriptRef = useRef<CmpBaseRef>(null);
   const refs: Array<React.RefObject<CmpBaseRef>> = [];
   useEffect(() => {
   }, []);
@@ -33,10 +37,9 @@ function App() {
     return ref;
   }
 
-  // 生成命令
-  const createCommand = (): void => {
-    var cmd = `${sdHomeRef.current?.getString()}\\venv\\Scripts\\python.exe -m accelerate.commands.launch --num_cpu_threads_per_process=8 ${sdHomeRef.current?.getString()}\\train_network.py `;
-    // var cmd = 'D:/Projects/sd-scripts/train_network.py ';
+  // 预览命令
+  const previewCommand = (): void => {
+    var cmd = `${sdHomeRef.current?.getString()}\\venv\\Scripts\\python.exe -m accelerate.commands.launch --num_cpu_threads_per_process=8 ${sdHomeRef.current?.getString()}\\${sdScriptRef.current?.getString()} `;
     refs.map((ref) => {
       if (ref.current != null) {
         var arg_str = ref.current.getArgumentString();
@@ -67,6 +70,13 @@ function App() {
     console.log(`/c start cmd /k ${result.trimEnd()}`);
     var cmd = new Command("start cmd", `/c start cmd /k ${result.trimEnd()}`);
     var output = await cmd.execute();
+    console.log('debug', { output });
+  }
+
+  const randInt = (min:number, max:number): number => {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
   return (
@@ -76,6 +86,7 @@ function App() {
         <Collapse className="comp_list" bordered={true} lazyload={false} style={{width: '100%', overflow: 'hidden' }} defaultActiveKey={['0']} >
           <Collapse.Item name="0" header="基本数据" disabled>
             <CmpFolder ref={sdHomeRef} id="sd_script_path" title="Sd Script Path" defaultPath={'\\'} isOptional={false} enable={true} defaultValue='D:\Projects\sd-scripts'></CmpFolder>
+            <CmpCombox ref={sdScriptRef} id="sd_script_name" title="Script" defaultValue={script_name[0]} options={script_name} isOptional={false} enable={true}></CmpCombox>
             <CmpFile ref={getRef()} id="pretrained_model_name_or_path" title="Model" filters={[{ name: 'Checkpoint', extensions: ['safetensors', 'ckpt', 'pt'] }]} defaultPath={'D:\\Projects\\stable-diffusion-webui\\models\\Stable-diffusion\\'}></CmpFile>
             <CmpFile ref={getRef()} id="vae" title="VAE" isOptional={true} enable={false} filters={[{ name: 'VAE', extensions: ['safetensors', 'ckpt', 'pt'] }]} defaultPath={'D:\\Projects\\stable-diffusion-webui\\models\\VAE\\'}></CmpFile> 
             <CmpFolder ref={getRef()} id="train_data_dir" title="Train Data Dir" defaultPath={'D:\\LoraTrainData\\trains\\'}></CmpFolder>
@@ -106,7 +117,7 @@ function App() {
             <CmpText ref={getRef()} id="save_model_as" title="Save Model As" defaultValue="safetensors" enable={false}></CmpText>
             <CmpCombox ref={getRef()} id="mixed_precision" title="Mixed Precision" defaultValue="bf16" enable={true} options={fomats}></CmpCombox>
             <CmpCombox ref={getRef()} id="save_precision" title="Save Precision" defaultValue="bf16" enable={true} options={fomats}></CmpCombox>
-            <CmpText ref={getRef()} id="seed" title="seed" defaultValue="666" isOptional={true}></CmpText>
+            <CmpText ref={getRef()} id="seed" title="seed" defaultValue={randInt(1, 10000).toString()} isOptional={true}></CmpText>
             <CmpNum ref={getRef()} id="clip_skip" title="Clip Skip" defaultValue={2} min={0} max={10} step={1} precision={0}></CmpNum>
             <CmpSwitch ref={getRef()} id="full_bf16" title="Full bf16" enable={true} isOptional={true}></CmpSwitch>
             <CmpSwitch ref={getRef()} id="full_fp16" title="Full fp16" enable={false} isOptional={true}></CmpSwitch>
@@ -179,20 +190,13 @@ function App() {
         <Grid.Col span={10}>
         <Space direction="vertical" style={{ padding: '15px', marginTop: '-9px' }}>
           <Space direction='horizontal'>
-            <Button
-              type="primary"
+            <Button style={{ width: 100 }}
               onClick={() => {
-                createCommand();
+                previewCommand();
               }}>
-              SD1.5
+              Preview
             </Button>
-            <Button
-              onClick={() => {
-                createCommand_xl();
-              }}>
-              SDXL
-            </Button>
-            <Button type="primary" onClick={() => { run() }}> Run </Button>
+            <Button style={{ width: 100 }} type="primary" onClick={() => { run() }}> Run </Button>
           </Space >
           <Space style={{ width: '100%' }}>
             <Input.TextArea value={result} style={{ width: 500 }} autoSize onChange={(v, e) => { setResult(v) }}></Input.TextArea>
