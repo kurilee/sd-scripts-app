@@ -40,6 +40,7 @@ const CmpNum = forwardRef<CmpBaseRef, CmpNumProps>((props, ref) => {
     getArgumentString: () => {
       return ComponentUtils.getArgString(isOptional, enable, props.id, inputRef.current?.dom.value, props.isExtraArg || false);
     },
+    getString:() => inputRef.current == null ? '' : inputRef.current.dom.value,
   }));
 
   return (

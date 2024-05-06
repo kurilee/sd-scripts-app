@@ -54,6 +54,7 @@ export interface CmpBase<T> {
 
 export interface CmpBaseRef {
   getArgumentString: () => string;
+  getString:() => string;
 }
 
 export { ComponentUtils };

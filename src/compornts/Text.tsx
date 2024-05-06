@@ -29,6 +29,7 @@ const CmpText = forwardRef<CmpBaseRef, CmpTextProps>((props, ref) => {
     getArgumentString: () => {
       return ComponentUtils.getArgString(isOptional, enable, props.id, value, props.isExtraArg || false);
     },
+    getString:() => value,
   }));
 
   return (
