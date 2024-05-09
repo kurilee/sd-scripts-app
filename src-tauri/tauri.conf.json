@@ -7,7 +7,7 @@
     "withGlobalTauri": false
   },
   "package": {
-    "productName": "sd-script-app",
+    "productName": "sd-scripts-app",
     "version": "0.0.1"
   },
   "tauri": {
@@ -44,7 +44,7 @@
         "icons/128x128@2x.png",
         "icons/icon.ico"
       ],
-      "identifier": "com.kurilee.sdscriptapp",
+      "identifier": "com.kurilee.sdscriptsapp",
       "targets": "all"
     },
     "security": {
