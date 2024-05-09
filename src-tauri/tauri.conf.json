@@ -15,7 +15,11 @@
       "all": false,
       "shell": {
         "all": true,
-        "scope": []
+        "execute": true,
+        "sidecar": true,
+        "scope": [ 
+          { "name": "start cmd", "cmd": "cmd", "args": true }
+        ]
       },
       "path": {
         "all": true
@@ -38,7 +42,6 @@
         "icons/32x32.png",
         "icons/128x128.png",
         "icons/128x128@2x.png",
-        "icons/icon.icns",
         "icons/icon.ico"
       ],
       "identifier": "com.kurilee.sdscriptapp",
@@ -54,7 +57,7 @@
       {
         "fullscreen": false,
         "resizable": true,
-        "title": "sd-script-app",
+        "title": "",
         "width": 1280,
         "height": 800
       }
