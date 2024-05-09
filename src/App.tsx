@@ -100,7 +100,7 @@ function App() {
         <Grid.Col span={14}>
           <Collapse className="comp_list" bordered={true} lazyload={false} style={{ width: '100%', overflow: 'hidden' }} defaultActiveKey={['0']}>
             <Collapse.Item name="0" header="基本数据" disabled>
-              <CmpFolder ref={sdHomeRef} id="sd_script_path" title="Sd Script Path" defaultValue="D:\Projects\sd-scripts" isOptional={false} enable={true} defaultPath={'\\'}></CmpFolder>
+              <CmpFolder ref={sdHomeRef} id="sd_scripts_path" title="Sd Scripts Path" defaultValue="D:\Projects\sd-scripts" isOptional={false} enable={true} defaultPath={'\\'}></CmpFolder>
               <CmpCombox ref={sdScriptRef} id="sd_script_name" title="Script" defaultValue={script_name[0]} options={script_name} isOptional={false} enable={true}></CmpCombox>
             </Collapse.Item>
             {createByConfig(configs)}
