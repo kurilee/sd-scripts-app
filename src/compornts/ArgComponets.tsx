@@ -26,9 +26,9 @@ function getArgString(isOptional:boolean, enable:boolean, id:string, value:strin
 }
 
 // 常量属性
-const titleWidth = '124px';
-const fullTitleWidth = '160px';
-const valueWidth = '420px';
+const titleWidth = '364px';
+const fullTitleWidth = '400px';
+const valueWidth = '220px';
 
 const ComponentUtils = {
   getTypStyle,
@@ -54,7 +54,9 @@ export interface CmpBase<T> {
 
 export interface CmpBaseRef {
   getArgumentString: () => string;
-  getString:() => string;
+  getEditorString:() => string;
+  setValue:(str: any) => void;
+  setEnable:(v: boolean) => void;
 }
 
 export { ComponentUtils };

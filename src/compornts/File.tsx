@@ -45,7 +45,13 @@ const CmpFile = forwardRef<CmpBaseRef, CmpFileProps>((props, ref) => {
     getArgumentString: () => {
       return ComponentUtils.getArgString(isOptional, enable, props.id, value, props.isExtraArg || false);
     },
-    getString:() => value,
+    getEditorString:() => value,
+    setValue:(str) => {
+      setValue(str);
+    },
+    setEnable(v) {
+      setEnable(v);
+    },
   }));
 
   return (

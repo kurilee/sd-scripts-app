@@ -40,7 +40,13 @@ const CmpNum = forwardRef<CmpBaseRef, CmpNumProps>((props, ref) => {
     getArgumentString: () => {
       return ComponentUtils.getArgString(isOptional, enable, props.id, inputRef.current?.dom.value, props.isExtraArg || false);
     },
-    getString:() => inputRef.current == null ? '' : inputRef.current.dom.value,
+    getEditorString:() => inputRef.current == null ? '' : inputRef.current.dom.value,
+    setValue:(num) => {
+      setValue(num);
+    },
+    setEnable(v) {
+      setEnable(v);
+    },
   }));
 
   return (
@@ -48,7 +54,7 @@ const CmpNum = forwardRef<CmpBaseRef, CmpNumProps>((props, ref) => {
       <Space style={{ margin: '2px' }}>
         {isOptional && <Switch size="small" type="round" checked={enable} onChange={setEnable}></Switch>}
         <Typography style={ComponentUtils.getTypStyle(isOptional)}>{title}</Typography>
-        <InputNumber size="mini" ref={inputRef} style={{ width: ComponentUtils.valueWidth }} mode="button" defaultValue={props.defaultValue} min={min} max={max} step={step} precision={precision} disabled={!enable}></InputNumber>
+        <InputNumber size="mini" ref={inputRef} style={{ width: ComponentUtils.valueWidth }} mode="button" defaultValue={props.defaultValue} min={min} max={max} step={step} precision={precision} disabled={!enable} value={value} onChange={(val) => { setValue(val) }}></InputNumber>
       </Space>
     </div>
   );

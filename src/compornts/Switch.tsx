@@ -24,7 +24,13 @@ const CmpSwitch = forwardRef<CmpBaseRef, CmpSwitchProps>((props, ref) => {
     getArgumentString: () => {
       return ComponentUtils.getArgString(isOptional, enable, props.id, undefined, props.isExtraArg || false);
     },
-    getString:() => '',
+    getEditorString:() => '',
+    setValue:(str) => {
+      // setValue(str);
+    },
+    setEnable(v) {
+      setEnable(v);
+    },
   }));
 
   return (
