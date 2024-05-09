@@ -129,7 +129,7 @@ const configs = {
         { visible: true, type: 'num', id: 'prior_loss_weight', title: 'Prior Loss Weight', defaultValue: 1, isOptional: true, enable: false, min: 0, max: 1, step: 0.01, precision: 2 },
         { visible: true, type: 'num', id: 'min_snr_gamma', title: 'Min Snr Gamma', defaultValue: 5, isOptional: true, enable: false, min: 0, max: 10, step: 1, precision: 0 },
         { visible: true, type: 'num', id: 'noise_offset_random_strength', title: 'Noise Offset Random Strength', defaultValue: 0, isOptional: true, enable: false, min: 0, max: 1, step: 0.01, precision: 2 },
-        { visible: true, type: 'num', id: 'ip_noise_gamma_random_strength ', title: 'Ip Noise Gamma Random Strength', defaultValue: 0, isOptional: true, enable: false, min: 0, max: 1, step: 0.01, precision: 2 },
+        { visible: true, type: 'num', id: 'ip_noise_gamma_random_strength', title: 'Ip Noise Gamma Random Strength', defaultValue: 0, isOptional: true, enable: false, min: 0, max: 1, step: 0.01, precision: 2 },
       ],
     },
     {
