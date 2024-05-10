@@ -6,7 +6,7 @@ function getTypStyle(isOptional: boolean, isSwitch: boolean = false) {
 
 // 获取参数 字符串值 eg. "block_dim=1,1,1,1,1..."
 function getArgExtra(id:string, value:string | undefined) {
-  return `\"${id}=${value}\"`
+  return `${id}=${value}`
 }
 
 // 获取参数 常规值 eg. --network_dim=32

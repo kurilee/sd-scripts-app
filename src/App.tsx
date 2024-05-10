@@ -41,7 +41,8 @@ function App() {
 
   // 执行脚本
   const run = async () => {
-    var cmd = new Command('start cmd', `/c start cmd /k ${result.trimEnd()}`);
+    var args = `/c start cmd /k ${result.trimEnd()}`;
+    var cmd = new Command('start cmd', args);
     var output = await cmd.execute();
   };
 
