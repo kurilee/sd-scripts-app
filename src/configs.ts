@@ -13,7 +13,7 @@ const fomats = ['fp16', 'bf16'];
 //
 const logwithOptions = ['tensorboard', 'wandb', 'all'];
 //
-const loseTypes = ['l2', 'huber', 'smooth_11'];
+const loseTypes = ['l2', 'huber', 'smooth_l1'];
 //
 const huberSchedules = ["constant", "exponential", "snr"];
 
@@ -35,7 +35,7 @@ const configs = {
         { visible: true, type: 'file', id: 'vae', title: 'VAE', defaultValue: '', isOptional: true, enable: false, filters: [{ name: 'VAE', extensions: ['safetensors', 'ckpt', 'pt'] }], defaultPath: 'D:\\Projects\\stable-diffusion-webui\\models\\VAE\\' },
         { visible: true, type: 'folder', id: 'train_data_dir', title: 'Train Data Dir', defaultValue: '', isOptional: false, enable: true, defaultPath: 'D:\\LoraTrainData\\trains\\' },
         { visible: true, type: 'folder', id: 'reg_data_dir', title: 'Reg Data Dir', defaultValue: '', isOptional: true, enable: false, defaultPath: 'D:\\LoraTrainData\\trains\\' },
-        { visible: true, type: 'folder', id: 'output_dir', title: 'Output Dir', defaultValue: '', isOptional: false, enable: true, defaultPath: 'D:\\LoraTrainData\\output\\' },
+        { visible: true, type: 'folder', id: 'output_dir', title: 'Output Dir', defaultValue: '', isOptional: false, enable: true, defaultPath: 'D:\\Projects\\stable-diffusion-webui\\models\\Lora\\自训练' },
         { visible: true, type: 'text', id: 'output_name', title: 'Output Name', defaultValue: '', isOptional: false, enable: true },
       ],
     },
