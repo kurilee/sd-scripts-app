@@ -1,3 +1,5 @@
+import { title } from "process";
+
 // 模型类型
 const loraType = ['networks.lora', 'networks.dylora', 'networks.lora_fa'];
 // 优化器选项
@@ -10,6 +12,10 @@ const samplerTypes = ['ddim', 'pndm', 'lms', 'euler', 'euler_a', 'heun', 'dpm_2'
 const fomats = ['fp16', 'bf16'];
 //
 const logwithOptions = ['tensorboard', 'wandb', 'all'];
+//
+const loseTypes = ['l2', 'huber', 'smooth_11'];
+//
+const huberSchedules = ["constant", "exponential", "snr"];
 
 // 生成随机数
 const randInt = (min: number, max: number): number => {
@@ -50,7 +56,8 @@ const configs = {
       id: '3',
       title: '训练设置',
       args: [
-        { visible: true, type: 'switch', id: 'xformers', title: 'Xformers', defaultValue: '', isOptional: true, enable: true },
+        { visible: true, type: 'switch', id: 'xformers', title: 'Xformers', defaultValue: '', isOptional: true, enable: false },
+        { visible: true, type: 'switch', id: 'sdpa', title: 'SDPA', defaultValue: '', isOptional: true, enable: true },
         { visible: true, type: 'switch', id: 'enable_bucket', title: 'Enable Bucket', defaultValue: '', isOptional: true, enable: true },
         { visible: true, type: 'switch', id: 'cache_latents', title: 'Cache Latents', defaultValue: '', isOptional: true, enable: false },
         { visible: true, type: 'switch', id: 'cache_latents_to_disk', title: 'Cache Latents To Disk', defaultValue: '', isOptional: true, enable: false },
@@ -101,6 +108,15 @@ const configs = {
     },
     {
       id: '6',
+      title: 'Loss',
+      args: [
+        { visible: true, type: 'combox', id: 'loss_type', title: 'Loss Type', defaultValue: 'l2', isOptional: true, enable: false, options: loseTypes },
+        { visible: true, type: 'combox', id: 'huber_schedule', title: 'Huber Schedule', defaultValue: 'snr', isOptional: true, enable: false, options: huberSchedules },
+        { visible: true, type: 'num', id: 'huber_c', title: 'Huber C', defaultValue: 0.1, isOptional: true, enable: false, min: 0.0, max: 1.0, step: 0.1, precision: 1 }
+      ]
+    },
+    {
+      id: '7',
       title: 'Tag',
       args: [
         { visible: true, type: 'text', id: 'caption_extension', title: 'Caption Extension', defaultValue: '.txt', isOptional: false, enable: false },
@@ -111,7 +127,7 @@ const configs = {
       ],
     },
     {
-      id: '7',
+      id: '8',
       title: '预览',
       args: [
         { visible: true, type: 'num', id: 'sample_every_n_epochs', title: 'Sample Every N Epochs', defaultValue: 1, isOptional: true, enable: false, min: 0, max: 300, step: 1, precision: 0 },
@@ -120,20 +136,21 @@ const configs = {
       ],
     },
     {
-      id: '8',
+      id: '9',
       title: '噪声处理',
       args: [
-        { visible: true, type: 'num', id: 'noise_offset', title: 'Noise Offset', defaultValue: 0.0357, isOptional: true, enable: false, min: 0, max: 1, step: 0.001, precision: 3 },
+        { visible: true, type: 'num', id: 'noise_offset', title: 'Noise Offset', defaultValue: 0.1, isOptional: true, enable: false, min: 0, max: 1, step: 0.001, precision: 3 },
+        { visible: true, type: 'switch', id: 'noise_offset_random_strength', title: 'Noise Offset Random Strength', defaultValue: '', isOptional: true, enable: false },
         { visible: true, type: 'num', id: 'multires_noise_iterations', title: 'Multires Noise Iterations', defaultValue: 6, isOptional: true, enable: false, min: 0, max: 10, step: 1, precision: 0 },
         { visible: true, type: 'num', id: 'multires_noise_discount', title: 'Multires Noise Discount', defaultValue: 0.3, isOptional: true, enable: false, min: 0.1, max: 0.8, step: 0.1, precision: 1 },
         { visible: true, type: 'num', id: 'prior_loss_weight', title: 'Prior Loss Weight', defaultValue: 1, isOptional: true, enable: false, min: 0, max: 1, step: 0.01, precision: 2 },
         { visible: true, type: 'num', id: 'min_snr_gamma', title: 'Min Snr Gamma', defaultValue: 5, isOptional: true, enable: false, min: 0, max: 10, step: 1, precision: 0 },
-        { visible: true, type: 'num', id: 'noise_offset_random_strength', title: 'Noise Offset Random Strength', defaultValue: 0, isOptional: true, enable: false, min: 0, max: 1, step: 0.01, precision: 2 },
-        { visible: true, type: 'num', id: 'ip_noise_gamma_random_strength', title: 'Ip Noise Gamma Random Strength', defaultValue: 0, isOptional: true, enable: false, min: 0, max: 1, step: 0.01, precision: 2 },
+        { visible: true, type: 'num', id: 'ip_noise_gamma', title: 'Input Perturbation Noise Gamma', defaultValue: 0.1, isOptional: true, enable: false, min: 0, max: 1, step: 0.001, precision: 3 },
+        { visible: true, type: 'switch', id: 'ip_noise_gamma_random_strength', title: 'Input Perturbation Noise Gamma Random Strength', defaultValue: '', isOptional: true, enable: false },
       ],
     },
     {
-      id: '9',
+      id: '10',
       title: '分层训练',
       args: [
         { visible: true, type: 'switch', id: 'network_args', title: 'Network Args', defaultValue: '', isOptional: true, enable: false },
