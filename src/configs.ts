@@ -87,7 +87,7 @@ const configs = {
         { visible: true, type: 'num', id: 'network_alpha', title: 'Network Alpha', defaultValue: 16, isOptional: false, enable: true, min: 1, max: 128, step: 1, precision: 0 },
         { visible: true, type: 'switch', id: 'dim_from_weights', title: 'Dim From Weights', defaultValue: '', isOptional: true, enable: false },
         { visible: true, type: 'file', id: 'network_weights', title: 'Network Weights', defaultValue: '', isOptional: true, enable: false, defaultPath: 'D:\\LoraTrainData\\output\\', filters: [{ name: 'Checkpoint', extensions: ['safetensors', 'ckpt', 'pt'] }] },
-        { visible: true, type: 'num', id: 'network_dropout', title: 'Network Dropout', defaultValue: 0.1, isOptional: true, enable: false, min: 0.1, max: 0.5, step: 0.01, precision: 2 },
+        { visible: true, type: 'num', id: 'network_dropout', title: 'Network Dropout', defaultValue: 0.1, isOptional: true, enable: false, min: 0.001, max: 0.5, step: 0.001, precision: 3 },
         { visible: true, type: 'num', id: 'scale_weight_norms', title: 'Scale Weigth Norms', defaultValue: 1.0, isOptional: true, enable: false, min: 0.01, max: 2.0, step: 0.01, precision: 2 },
       ],
     },
@@ -110,7 +110,7 @@ const configs = {
       id: '6',
       title: 'Loss',
       args: [
-        { visible: true, type: 'combox', id: 'loss_type', title: 'Loss Type', defaultValue: 'l2', isOptional: true, enable: false, options: loseTypes },
+        { visible: true, type: 'combox', id: 'loss_type', title: 'Loss Type', defaultValue: 'huber', isOptional: true, enable: false, options: loseTypes },
         { visible: true, type: 'combox', id: 'huber_schedule', title: 'Huber Schedule', defaultValue: 'snr', isOptional: true, enable: false, options: huberSchedules },
         { visible: true, type: 'num', id: 'huber_c', title: 'Huber C', defaultValue: 0.1, isOptional: true, enable: false, min: 0.0, max: 1.0, step: 0.1, precision: 1 }
       ]
