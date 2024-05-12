@@ -70,7 +70,7 @@ const configs = {
         { visible: true, type: 'combox', id: 'mixed_precision', title: 'Mixed Precision', defaultValue: 'bf16', isOptional: false, enable: true, options: fomats },
         { visible: true, type: 'text', id: 'seed', title: 'Seed', defaultValue: randInt(1, 10000).toString(), isOptional: false, enable: true },
         { visible: true, type: 'num', id: 'clip_skip', title: 'Clip Skip', defaultValue: 2, isOptional: false, enable: true, min: 0, max: 10, step: 1, precision: 0 },
-        { visible: true, type: 'switch', id: 'full_bf16', title: 'Full bf16', defaultValue: '', isOptional: true, enable: true },
+        { visible: true, type: 'switch', id: 'full_bf16', title: 'Full bf16', defaultValue: '', isOptional: true, enable: false },
         { visible: true, type: 'switch', id: 'full_fp16', title: 'Full fp16', defaultValue: '', isOptional: true, enable: false },
         { visible: true, type: 'switch', id: 'fp8_base', title: 'FP8 Base', defaultValue: '', isOptional: true, enable: false },
         { visible: true, type: 'text', id: 'max_data_loader_n_workers', title: 'Max Data Loader', defaultValue: '0', isOptional: true, enable: false },
@@ -113,6 +113,15 @@ const configs = {
         { visible: true, type: 'combox', id: 'loss_type', title: 'Loss Type', defaultValue: 'huber', isOptional: true, enable: false, options: loseTypes },
         { visible: true, type: 'combox', id: 'huber_schedule', title: 'Huber Schedule', defaultValue: 'snr', isOptional: true, enable: false, options: huberSchedules },
         { visible: true, type: 'num', id: 'huber_c', title: 'Huber C', defaultValue: 0.1, isOptional: true, enable: false, min: 0.0, max: 1.0, step: 0.1, precision: 1 }
+      ]
+    },
+    {
+      id: '71',
+      title: '数据增强',
+      args: [
+        { visible: true, type: 'switch', id: 'color_aug', title: 'Color Aug', defaultValue: '', isOptional: true, enable: false },
+        { visible: true, type: 'switch', id: 'flip_aug', title: 'Flip Aug', defaultValue: '', isOptional: true, enable: false },
+        { visible: true, type: 'switch', id: 'random_crop', title: 'Random Crop', defaultValue: '', isOptional: true, enable: false },
       ]
     },
     {
