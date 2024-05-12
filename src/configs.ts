@@ -44,7 +44,7 @@ const configs = {
       title: '输出&日志',
       args: [
         { visible: true, type: 'text', id: 'save_model_as', title: 'Save Model As', defaultValue: 'safetensors', isOptional: false, enable: true },
-        { visible: true, type: 'combox', id: 'save_precision', title: 'Save Precision', defaultValue: 'bf16', isOptional: false, enable: true, options: fomats },
+        { visible: true, type: 'combox', id: 'save_precision', title: 'Save Precision', defaultValue: 'fp16', isOptional: false, enable: true, options: fomats },
         { visible: true, type: 'num', id: 'save_every_n_epochs', title: 'Save Every N Epochs', defaultValue: 1, isOptional: true, enable: false, min: 1, max: 30, step: 1, precision: 0 },
         { visible: true, type: 'switch', id: 'no_metadata', title: 'No Metadata', defaultValue: '', isOptional: true, enable: true },
         { visible: true, type: 'combox', id: 'log_with', title: 'Log With', defaultValue: 'wandb', isOptional: true, enable: false, options: logwithOptions },
@@ -67,7 +67,7 @@ const configs = {
         { visible: true, type: 'switch', id: 'network_train_text_encoder_only', title: 'Train Text Encoder Only', defaultValue: '', isOptional: true, enable: false },
         { visible: true, type: 'switch', id: 'network_train_unet_only', title: 'Train UNet Only', defaultValue: '', isOptional: true, enable: true },
         { visible: true, type: 'switch', id: 'no_half_vae', title: 'No Half VAE', defaultValue: '', isOptional: true, enable: true },
-        { visible: true, type: 'combox', id: 'mixed_precision', title: 'Mixed Precision', defaultValue: 'bf16', isOptional: false, enable: true, options: fomats },
+        { visible: true, type: 'combox', id: 'mixed_precision', title: 'Mixed Precision', defaultValue: 'fp16', isOptional: false, enable: true, options: fomats },
         { visible: true, type: 'text', id: 'seed', title: 'Seed', defaultValue: randInt(1, 10000).toString(), isOptional: false, enable: true },
         { visible: true, type: 'num', id: 'clip_skip', title: 'Clip Skip', defaultValue: 2, isOptional: false, enable: true, min: 0, max: 10, step: 1, precision: 0 },
         { visible: true, type: 'switch', id: 'full_bf16', title: 'Full bf16', defaultValue: '', isOptional: true, enable: false },
