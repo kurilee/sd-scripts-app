@@ -67,7 +67,7 @@ const configs = {
         { visible: true, type: 'switch', id: 'network_train_text_encoder_only', title: 'Train Text Encoder Only', defaultValue: '', isOptional: true, enable: false },
         { visible: true, type: 'switch', id: 'network_train_unet_only', title: 'Train UNet Only', defaultValue: '', isOptional: true, enable: true },
         { visible: true, type: 'switch', id: 'no_half_vae', title: 'No Half VAE', defaultValue: '', isOptional: true, enable: true },
-        { visible: true, type: 'text', id: 'mixed_precision', title: 'Mixed Precision', defaultValue: 'bf16', isOptional: false, enable: true, options: fomats },
+        { visible: true, type: 'combox', id: 'mixed_precision', title: 'Mixed Precision', defaultValue: 'bf16', isOptional: false, enable: true, options: fomats },
         { visible: true, type: 'text', id: 'seed', title: 'Seed', defaultValue: randInt(1, 10000).toString(), isOptional: false, enable: true },
         { visible: true, type: 'num', id: 'clip_skip', title: 'Clip Skip', defaultValue: 2, isOptional: false, enable: true, min: 0, max: 10, step: 1, precision: 0 },
         { visible: true, type: 'switch', id: 'full_bf16', title: 'Full bf16', defaultValue: '', isOptional: true, enable: true },
