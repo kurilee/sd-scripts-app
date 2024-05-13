@@ -8,7 +8,7 @@ import { Command } from '@tauri-apps/api/shell';
 import { configs } from './configs';
 
 //
-const script_name = ['train_network.py', 'train_network_xl.py'];
+const script_name = ['train_network.py', 'sdxl_train_network.py'];
 
 function App() {
   const [result, setResult] = useState('');
