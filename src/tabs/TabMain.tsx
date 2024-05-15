@@ -1,10 +1,11 @@
 import { Collapse, Space, Button, Input, Grid } from "@arco-design/web-react";
 import { CmpBaseRef } from "../compornts/ArgumentEditor/ArgComponets";
 import { CmpFolder, CmpCombox, createComponent } from "../compornts/ArgumentEditor/Components";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { clipboard } from "@tauri-apps/api";
 import { Command } from "@tauri-apps/api/shell";
 import { configs } from "../configs";
+import { AppContext, AppContextType } from "../AppContext";
 
 //
 const script_name = ["train_network.py", "sdxl_train_network.py"];
@@ -14,6 +15,7 @@ const TabMain = (props: any) => {
   const sdHomeRef = useRef<CmpBaseRef>(null);
   const sdScriptRef = useRef<CmpBaseRef>(null);
   const refMap: Map<string, React.RefObject<CmpBaseRef>> = new Map();
+  const appContext = useContext<AppContextType>(AppContext);
   useEffect(() => {}, []);
 
   // 创建控件引用
@@ -40,6 +42,10 @@ const TabMain = (props: any) => {
 
   // 执行脚本
   const run = async () => {
+    var copyHistory = [ ...appContext.history];
+    copyHistory.push({ title: new Date().toLocaleString(), content: result });
+    appContext.setHistory(copyHistory);
+
     var args = `/c start cmd /k ${result.trimEnd()} & exit`;
     var cmd = new Command("start cmd", args);
     var output = await cmd.spawn();

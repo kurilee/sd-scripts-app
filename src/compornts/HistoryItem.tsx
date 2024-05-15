@@ -1,8 +1,11 @@
+import { Card } from "@arco-design/web-react";
+
 const HistoryItem = (props: any) => {
     return (
-        <div className="history_item">
-            <div className="history_item_title">{props.title}</div>
-            <div className="history_item_content">{props.content}</div>
-        </div>
+        <Card title={props.title} >
+            { props.content }
+        </Card>
     )
 }
+
+export { HistoryItem }
