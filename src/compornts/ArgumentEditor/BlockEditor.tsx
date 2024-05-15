@@ -31,7 +31,7 @@ const BlockCell = forwardRef<BlockCellRef, BlockCellProps>((props, ref) => {
     getValue: () => value,
     setValue: (value: number) => {
       setValue(value);
-    },
+    }
   }));
 
   // const onValueChange = (value: number): void => { setValue(value) }
@@ -101,6 +101,7 @@ const BlockEditor = forwardRef<CmpBaseRef, CmpTextProps>((props, ref) => {
     setEnable(v) {
       setEnable(v);
     },
+    getEnable: () => enable
   }));
 
   const updateValueFromBlockEditor = (): void => {

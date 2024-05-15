@@ -47,6 +47,7 @@ const CmpNum = forwardRef<CmpBaseRef, CmpNumProps>((props, ref) => {
     setEnable(v) {
       setEnable(v);
     },
+    getEnable: () => enable
   }));
 
   return (

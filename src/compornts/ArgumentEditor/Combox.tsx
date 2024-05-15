@@ -42,6 +42,7 @@ const CmpCombox = forwardRef<CmpBaseRef, CmpComboxProps>((props, ref) => {
     setEnable(v) {
       setEnable(v);
     },
+    getEnable: () => enable
   }));
 
   return (

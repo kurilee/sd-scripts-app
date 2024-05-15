@@ -10,7 +10,7 @@ import { AppContext, AppContextType } from "../AppContext";
 //
 const script_name = ["train_network.py", "sdxl_train_network.py"];
 
-const TabMain = (props: any) => {
+const TabNetwork = (props: any) => {
   const [result, setResult] = useState("");
   const sdHomeRef = useRef<CmpBaseRef>(null);
   const sdScriptRef = useRef<CmpBaseRef>(null);
@@ -40,10 +40,31 @@ const TabMain = (props: any) => {
     clipboard.writeText(cmd);
   };
 
+  const exportJson = (): string => {
+    var result: any = {};
+    refMap.forEach((ref, key) => {
+        result[key] = { enable: ref.current?.getEnable(), value: ref.current?.getEditorString().trim() };
+    });
+    return JSON.stringify(result);
+  };
+
+  const importJson = (json: string) => {
+    var result: any = JSON.parse(json);
+    refMap.forEach((ref, key) => {
+      var enable = result[key]["enable"];
+      var value = result[key]["value"];
+      ref.current?.setEnable(enable);
+      ref.current?.setValue(value);
+    });
+  }
+
   // 执行脚本
   const run = async () => {
-    var copyHistory = [ ...appContext.history];
-    copyHistory.push({ title: new Date().toLocaleString(), content: result });
+    var file_name = refMap.get('output_name')?.current?.getEditorString().trim();
+    var file_folder = refMap.get('')?.current?.getEditorString().trim();
+    var full_file_path = `${file_folder}\\${file_name}`;
+    var copyHistory = [...appContext.history];
+    copyHistory.push({ title: file_name, date: new Date(), content: result, json: exportJson(), path: full_file_path });
     appContext.setHistory(copyHistory);
 
     var args = `/c start cmd /k ${result.trimEnd()} & exit`;
@@ -136,4 +157,4 @@ const TabMain = (props: any) => {
   );
 };
 
-export { TabMain };
+export { TabNetwork as TabMain };

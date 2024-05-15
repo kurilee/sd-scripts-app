@@ -52,6 +52,7 @@ const CmpFile = forwardRef<CmpBaseRef, CmpFileProps>((props, ref) => {
     setEnable(v) {
       setEnable(v);
     },
+    getEnable: () => enable
   }));
 
   return (

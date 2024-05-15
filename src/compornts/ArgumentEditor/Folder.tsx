@@ -39,6 +39,7 @@ const CmpFolder = forwardRef<CmpBaseRef, CmpFolderProps>((props, ref) => {
     setEnable(v) {
       setEnable(v);
     },
+    getEnable: () => enable
   }));
 
   async function onOpenClicked() {

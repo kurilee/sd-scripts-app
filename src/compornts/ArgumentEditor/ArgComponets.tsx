@@ -57,6 +57,7 @@ export interface CmpBaseRef {
   getEditorString:() => string;
   setValue:(str: any) => void;
   setEnable:(v: boolean) => void;
+  getEnable:() => boolean;
 }
 
 export { ComponentUtils };

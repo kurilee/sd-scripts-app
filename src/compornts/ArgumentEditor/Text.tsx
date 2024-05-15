@@ -36,6 +36,7 @@ const CmpText = forwardRef<CmpBaseRef, CmpTextProps>((props, ref) => {
     setEnable(v) {
       setEnable(v);
     },
+    getEnable: () => enable
   }));
 
   return (
