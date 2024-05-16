@@ -6,6 +6,7 @@ import { clipboard } from "@tauri-apps/api";
 import { Command } from "@tauri-apps/api/shell";
 import { configs } from "../configs";
 import { AppContext, AppContextType } from "../AppContext";
+import { title } from "process";
 
 //
 const script_name = ["train_network.py", "sdxl_train_network.py"];
@@ -67,6 +68,9 @@ const TabNetwork = (props: any) => {
     copyHistory.push({ title: file_name, date: new Date(), content: result, json: exportJson(), path: full_file_path });
     appContext.setHistory(copyHistory);
 
+    var json_result = JSON.stringify(copyHistory);
+    localStorage.setItem("sd-script-app_history", json_result);
+
     var args = `/c start cmd /k ${result.trimEnd()} & exit`;
     var cmd = new Command("start cmd", args);
     var output = await cmd.spawn();
@@ -86,20 +90,18 @@ const TabNetwork = (props: any) => {
     return <>{config.groups.map((group: any) => createGroup(group))}</>;
   };
 
-  // 套用XL模板
-  const applyXLTemplate = () => {
-    sdScriptRef.current?.setValue(script_name[1]);
-    refMap.get("cache_latents")?.current?.setEnable(true);
-    refMap.get("cache_latents_to_disk")?.current?.setEnable(true);
-    refMap.get("cache_text_encoder_outputs")?.current?.setEnable(true);
-    refMap.get("cache_text_encoder_outputs_to_disk")?.current?.setEnable(true);
-    refMap.get("persistent_data_loader_workers")?.current?.setEnable(false);
-    refMap.get("clip_skip")?.current?.setValue(1);
-    refMap.get("max_data_loader_n_workers")?.current?.setEnable(true);
-    refMap.get("max_data_loader_n_workers")?.current?.setValue(1);
-    refMap.get("gradient_checkpointing")?.current?.setEnable(true);
-    refMap.get("resolution")?.current?.setValue("1024,1024");
-  };
+  // 保存模板
+  const saveToTemplate = (name: string, desc: string) => {
+    var template = { title: name, desc, json: exportJson() };
+    var copyTemplates = [...appContext.templates];
+    copyTemplates.push(template);
+    appContext.setTemplates(copyTemplates);
+  }
+
+  // 打开保存面板
+  const openSaveTemplateModal = () => {
+
+  }
 
   return (
     <Grid.Row style={{ paddingLeft: "5px", paddingRight: "5px" }}>
@@ -118,14 +120,6 @@ const TabNetwork = (props: any) => {
             <Button
               style={{ width: 100 }}
               onClick={() => {
-                applyXLTemplate();
-              }}
-            >
-              XL
-            </Button>
-            <Button
-              style={{ width: 100 }}
-              onClick={() => {
                 previewCommand();
               }}
             >
@@ -139,6 +133,15 @@ const TabNetwork = (props: any) => {
               }}
             >
               Run
+            </Button>
+            <Button
+              style={{ width: 100 }}
+              type="primary"
+              onClick={() => {
+                openSaveTemplateModal();
+              }}
+            >
+              Save
             </Button>
           </Space>
           <Space style={{ width: "100%" }}>

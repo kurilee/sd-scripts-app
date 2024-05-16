@@ -13,6 +13,7 @@
   "dependencies": {
     "@arco-design/web-react": "^2.47.0",
     "@tauri-apps/api": "^1.2.0",
+    "dayjs": "^1.11.11",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router": "^6.10.0",
