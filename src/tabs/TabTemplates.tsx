@@ -10,7 +10,7 @@ const TabTemplates = (props: any) => {
         {
             appContext.templates.map((item: any, index: number) => {
                 return (
-                    <TemplateItem key={index} title={item.title} desc={item.desc} />
+                    <TemplateItem key={index} title={item.title} desc={item.desc} json={item.json} />
                 );
             })
         }

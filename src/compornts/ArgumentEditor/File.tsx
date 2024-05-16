@@ -8,6 +8,7 @@ import { appConfigDir } from '@tauri-apps/api/path';
 import { open } from '@tauri-apps/api/dialog';
 
 import { CmpBaseRef, CmpBase, ComponentUtils } from './ArgComponets';
+import { lang } from '../../i18n';
 
 export interface CmpFileProps extends CmpBase<string> {
   filters: Array<{ name: string; extensions: Array<string> }>;
@@ -77,7 +78,7 @@ const CmpFile = forwardRef<CmpBaseRef, CmpFileProps>((props, ref) => {
           onClick={async () => {
             await onOpenClicked();
           }}>
-          Open
+          {lang('editor.open_dialog')}
         </Button>
       </Space>
     </div>

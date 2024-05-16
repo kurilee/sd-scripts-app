@@ -8,6 +8,7 @@ import { appConfigDir } from '@tauri-apps/api/path';
 import { open } from '@tauri-apps/api/dialog';
 
 import { CmpBaseRef, CmpBase, ComponentUtils } from './ArgComponets';
+import { lang } from '../../i18n';
 
 export interface CmpFolderProps extends CmpBase<string> {
   defaultPath: string | null;
@@ -63,7 +64,7 @@ const CmpFolder = forwardRef<CmpBaseRef, CmpFolderProps>((props, ref) => {
           onClick={async (e) => {
             await onOpenClicked();
           }}>
-          Open
+          {lang('editor.open_dialog')}
         </Button>
       </Space>
     </div>

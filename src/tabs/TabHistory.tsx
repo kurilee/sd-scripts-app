@@ -13,7 +13,7 @@ const HistoryTab = (props: any) => {
     <div style={{ paddingLeft: "5px", paddingRight: "5px" }}>
       <Button type="primary" onClick={() => { clearHistory() }} style={{ marginBottom: '5px' }}>Clear</Button>
       <List>
-        {appContext.history.map((item: any, index: number) => {
+        {appContext.history.reverse().map((item: any, index: number) => {
           return (
             <List.Item key={index}>
               <HistoryItem path={item.path} title={item.title} date={item.date} content={item.content} json={JSON.parse(item.json)}/>

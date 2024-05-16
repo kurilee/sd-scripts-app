@@ -1,3 +1,5 @@
+import { lang } from "./i18n";
+
 // 模型类型
 const loraType = ["networks.lora", "networks.dylora", "networks.lora_fa"];
 // 优化器选项
@@ -26,15 +28,15 @@ const randInt = (min: number, max: number): number => {
 const configs = {
   groups: [
     {
-      id: "1",
-      title: "基本数据",
+      id: "configs.group.base",
+      title: lang("configs.group.base"),
       args: [
-        { visible: true, type: "file", id: "pretrained_model_name_or_path", title: "Model", defaultValue: "", isOptional: false, enable: true, filters: [{ name: "Checkpoint", extensions: ["safetensors", "ckpt", "pt"] }], defaultPath: "D:\\Projects\\stable-diffusion-webui\\models\\Stable-diffusion\\" },
-        { visible: true, type: "file", id: "vae", title: "VAE", defaultValue: "", isOptional: true, enable: false, filters: [{ name: "VAE", extensions: ["safetensors", "ckpt", "pt"] }], defaultPath: "D:\\Projects\\stable-diffusion-webui\\models\\VAE\\" },
-        { visible: true, type: "folder", id: "train_data_dir", title: "Train Data Dir", defaultValue: "", isOptional: false, enable: true, defaultPath: "D:\\LoraTrainData\\trains\\" },
-        { visible: true, type: "folder", id: "reg_data_dir", title: "Reg Data Dir", defaultValue: "", isOptional: true, enable: false, defaultPath: "D:\\LoraTrainData\\trains\\" },
-        { visible: true, type: "folder", id: "output_dir", title: "Output Dir", defaultValue: "", isOptional: false, enable: true, defaultPath: "D:\\Projects\\stable-diffusion-webui\\models\\Lora\\自训练" },
-        { visible: true, type: "text", id: "output_name", title: "Output Name", defaultValue: "", isOptional: false, enable: true },
+        { visible: true, type: "file", id: "pretrained_model_name_or_path", title: lang("configs.base.model"), defaultValue: "", isOptional: false, enable: true, filters: [{ name: "Checkpoint", extensions: ["safetensors", "ckpt", "pt"] }], defaultPath: "D:\\Projects\\stable-diffusion-webui\\models\\Stable-diffusion\\" },
+        { visible: true, type: "file", id: "vae", title: lang("configs.base.vae"), defaultValue: "", isOptional: true, enable: false, filters: [{ name: "VAE", extensions: ["safetensors", "ckpt", "pt"] }], defaultPath: "D:\\Projects\\stable-diffusion-webui\\models\\VAE\\" },
+        { visible: true, type: "folder", id: "train_data_dir", title: lang("configs.base.train_data_dir"), defaultValue: "", isOptional: false, enable: true, defaultPath: "D:\\LoraTrainData\\trains\\" },
+        { visible: true, type: "folder", id: "reg_data_dir", title: lang("configs.base.reg_data_dir"), defaultValue: "", isOptional: true, enable: false, defaultPath: "D:\\LoraTrainData\\trains\\" },
+        { visible: true, type: "folder", id: "output_dir", title: lang("configs.base.output_dir"), defaultValue: "", isOptional: false, enable: true, defaultPath: "D:\\Projects\\stable-diffusion-webui\\models\\Lora\\自训练" },
+        { visible: true, type: "text", id: "output_name", title: lang("configs.base.output_name"), defaultValue: "", isOptional: false, enable: true },
       ],
     },
     {

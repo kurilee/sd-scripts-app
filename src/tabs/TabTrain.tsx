@@ -1,21 +1,20 @@
-import { Collapse, Space, Button, Input, Grid, Modal, Form } from '@arco-design/web-react';
+import { Collapse, Space, Button, Input, Grid, Modal, Form, Message } from '@arco-design/web-react';
 import { CmpBaseRef } from '../compornts/ArgumentEditor/ArgComponets';
 import { CmpFolder, CmpCombox, createComponent } from '../compornts/ArgumentEditor/Components';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { clipboard } from '@tauri-apps/api';
 import { Command } from '@tauri-apps/api/shell';
 import { configs } from '../configs';
-import { AppContext, AppContextType } from '../AppContext';
-import { RefInputType } from '@arco-design/web-react/es/Input';
+import { AppContext, AppContextType, exportJson } from '../AppContext';
+import { RefInputType } from '@arco-design/web-react/es/Input/interface';
+import { lang } from '../i18n';
 
 //
 const script_name = ['train_network.py', 'sdxl_train_network.py'];
 
-const TabNetwork = (props: any) => {
+const TabTrain = (props: any) => {
   const [result, setResult] = useState('');
-  const sdHomeRef = useRef<CmpBaseRef>(null);
   const sdScriptRef = useRef<CmpBaseRef>(null);
-  const refMap: Map<string, React.RefObject<CmpBaseRef>> = new Map();
   const appContext = useContext<AppContextType>(AppContext);
   const [saveTemplateModalVisible, setSaveTemplateModalVisible] = useState(false);
   const saveTemplateNameRef = useRef<RefInputType>(null);
@@ -25,14 +24,14 @@ const TabNetwork = (props: any) => {
   // 创建控件引用
   const createRef = (id: string): React.RefObject<CmpBaseRef> => {
     const ref = useRef<CmpBaseRef>(null);
-    refMap.set(id, ref);
+    appContext.refMap.set(id, ref);
     return ref;
   };
 
   // 预览命令
   const previewCommand = (): void => {
-    var cmd = `${sdHomeRef.current?.getEditorString()}\\venv\\Scripts\\python.exe -m accelerate.commands.launch --num_cpu_threads_per_process=8 ${sdHomeRef.current?.getEditorString()}\\${sdScriptRef.current?.getEditorString()} `;
-    refMap.forEach((ref) => {
+    var cmd = `${appContext.sdHomeRef?.current?.getEditorString()}\\venv\\Scripts\\python.exe -m accelerate.commands.launch --num_cpu_threads_per_process=8 ${appContext.sdHomeRef?.current?.getEditorString()}\\${sdScriptRef.current?.getEditorString()} `;
+    appContext.refMap.forEach((ref) => {
       if (ref.current != null) {
         var arg_str = ref.current.getArgumentString();
         if (arg_str.length > 0) {
@@ -44,31 +43,14 @@ const TabNetwork = (props: any) => {
     clipboard.writeText(cmd);
   };
 
-  const exportJson = (): string => {
-    var result: any = {};
-    refMap.forEach((ref, key) => {
-      result[key] = { enable: ref.current?.getEnable(), value: ref.current?.getEditorString().trim() };
-    });
-    return JSON.stringify(result);
-  };
-
-  const importJson = (json: string) => {
-    var result: any = JSON.parse(json);
-    refMap.forEach((ref, key) => {
-      var enable = result[key]['enable'];
-      var value = result[key]['value'];
-      ref.current?.setEnable(enable);
-      ref.current?.setValue(value);
-    });
-  };
-
   // 执行脚本
   const run = async () => {
-    var file_name = refMap.get('output_name')?.current?.getEditorString().trim();
-    var file_folder = refMap.get('')?.current?.getEditorString().trim();
-    var full_file_path = `${file_folder}\\${file_name}`;
+    var file_name = appContext.refMap.get('output_name')?.current?.getEditorString().trim();
+    var file_folder = appContext.refMap.get('output_dir')?.current?.getEditorString().trim();
+    var file_ext = appContext.refMap.get('save_model_as')?.current?.getEditorString().trim();
+    var full_file_path = `${file_folder}\\${file_name}.${file_ext}`;
     var copyHistory = [...appContext.history];
-    copyHistory.push({ title: file_name, date: new Date(), content: result, json: exportJson(), path: full_file_path });
+    copyHistory.push({ title: file_name, date: new Date(), content: result, json: exportJson(appContext.refMap), path: full_file_path });
     appContext.setHistory(copyHistory);
 
     var json_result = JSON.stringify(copyHistory);
@@ -96,11 +78,28 @@ const TabNetwork = (props: any) => {
   // 保存模板
   const saveToTemplate = () => {
     var name = saveTemplateNameRef.current?.dom.value;
+    if (name === null || name === undefined || name === '') {
+      Message.error('模板名称不能为空');
+      return;
+    }
     var desc = saveTemplateDescRef.current?.dom.value;
-    var template = { title: name, desc, json: exportJson() };
-    var copyTemplates = [...appContext.templates];
-    copyTemplates.push(template);
-    appContext.setTemplates(copyTemplates);
+    var template = { title: name, desc, json: exportJson(appContext.refMap) };
+    var idx = appContext.templates.findIndex((item) => item.title === name);
+    var copyTemplates: any[] = [];
+    if (idx !== -1) {
+      var arr_part_1 = appContext.templates.slice(0, idx);
+      var arr_part_2 = appContext.templates.splice(idx + 1, appContext.templates.length);
+      copyTemplates = [...arr_part_1, template, ...arr_part_2];
+      appContext.setTemplates(copyTemplates);
+    }
+    else {
+      copyTemplates = [...appContext.templates, template];
+      appContext.setTemplates(copyTemplates);
+    }
+
+    localStorage.setItem('sd-script-app_templates', JSON.stringify(copyTemplates));
+
+    setSaveTemplateModalVisible(false);
   };
 
   // 打开保存面板
@@ -115,7 +114,6 @@ const TabNetwork = (props: any) => {
         visible={saveTemplateModalVisible}
         onOk={() => {
           saveToTemplate();
-          setSaveTemplateModalVisible(false);
         }}
         onCancel={() => {
           setSaveTemplateModalVisible(false);
@@ -138,9 +136,8 @@ const TabNetwork = (props: any) => {
       <Grid.Row style={{ paddingLeft: '5px', paddingRight: '5px' }}>
         <Grid.Col span={14}>
           <Collapse className="comp_list" bordered={true} lazyload={false} style={{ width: '100%', overflow: 'hidden' }} defaultActiveKey={['0']}>
-            <Collapse.Item name="0" header="基本数据" disabled>
-              <CmpFolder ref={sdHomeRef} id="sd_scripts_path" title="Sd Scripts Path" defaultValue="D:\Projects\sd-scripts" isOptional={false} enable={true} defaultPath={'\\'}></CmpFolder>
-              <CmpCombox ref={sdScriptRef} id="sd_script_name" title="Script" defaultValue={script_name[0]} options={script_name} isOptional={false} enable={true}></CmpCombox>
+            <Collapse.Item name="0" header={lang('tab.train.script_group')} disabled>
+              <CmpCombox ref={sdScriptRef} id="sd_script_name" title={lang('tab.train.script_group.script')} defaultValue={script_name[0]} options={script_name} isOptional={false} enable={true}></CmpCombox>
             </Collapse.Item>
             {createByConfig(configs)}
           </Collapse>
@@ -188,4 +185,4 @@ const TabNetwork = (props: any) => {
   );
 };
 
-export { TabNetwork as TabMain };
+export { TabTrain };
