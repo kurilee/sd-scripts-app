@@ -150,7 +150,7 @@ const TabTrain = (props: any) => {
                 onClick={() => {
                   previewCommand();
                 }}>
-                Preview
+                {lang('app.btn.preview_cmd')}
               </Button>
               <Button
                 style={{ width: 100 }}
@@ -158,7 +158,7 @@ const TabTrain = (props: any) => {
                 onClick={() => {
                   run();
                 }}>
-                Run
+                {lang('app.btn.run_cmd')}
               </Button>
               <Button
                 style={{ width: 100 }}
@@ -166,7 +166,7 @@ const TabTrain = (props: any) => {
                 onClick={() => {
                   openSaveTemplateModal();
                 }}>
-                Save
+                {lang('app.btn.save_template')}
               </Button>
             </Space>
             <Space style={{ width: '100%' }}>

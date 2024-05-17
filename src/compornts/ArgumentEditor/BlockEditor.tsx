@@ -5,6 +5,7 @@ import { RefInputType } from "@arco-design/web-react/es/Input/interface";
 import { Switch, Input, Typography, Space, InputNumber, Modal, Button, Slider } from "@arco-design/web-react";
 
 import { CmpBaseRef, CmpBase, ComponentUtils } from "./ArgComponets";
+import { lang } from "../../i18n";
 
 export interface BlockCellProps {
   lb: string;
@@ -144,7 +145,7 @@ const BlockEditor = forwardRef<CmpBaseRef, CmpTextProps>((props, ref) => {
   return (
     <div>
       <Modal
-        title="Block Editor"
+        title={lang("modal.title.block_editor")}
         visible={modalVisible}
         onOk={() => {
           setModalVisible(false);

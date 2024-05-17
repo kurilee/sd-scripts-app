@@ -1,6 +1,7 @@
 import { Card, Button } from "@arco-design/web-react";
 import { AppContext, deleteTemplateByName, importJson } from "../AppContext";
 import { useContext } from "react";
+import { lang } from "../i18n";
 
 const TemplateItem = (props: any) => {
   const appContext = useContext(AppContext);
@@ -11,7 +12,7 @@ const TemplateItem = (props: any) => {
       actions={[
         <Button onClick={() => {
           importJson(appContext.refMap, props.json);
-        }}>apply</Button>,
+        }}>{lang('app.btn.apply')}</Button>,
         <Button
           onClick={() => {
             var result = deleteTemplateByName(appContext.templates, props.title);
@@ -20,7 +21,7 @@ const TemplateItem = (props: any) => {
             localStorage.setItem('sd-script-app_templates', JSON.stringify(result));
           }}
         >
-          delete
+          {lang('app.btn.delete')}
         </Button>,
       ]}
     >
