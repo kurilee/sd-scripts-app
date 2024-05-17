@@ -3,7 +3,8 @@ import { CmpBaseRef } from "./compornts/ArgumentEditor/ArgComponets";
 
 class AppContextType {
   // ref Sd-Scripts path
-  sdHomeRef: React.RefObject<CmpBaseRef> | null = null;
+  sdHomePath: string = "";
+  setSdHomePath: any = () => {};
 
   // refMap
   refMap: Map<string, React.RefObject<CmpBaseRef>> = new Map<string, React.RefObject<CmpBaseRef>>();
@@ -27,7 +28,8 @@ const storage_templates = localStorage.getItem("sd-script-app_templates");
 const init_templates: any[] = JSON.parse(storage_templates == null ? "[]" : storage_templates);
 
 const AppContext = React.createContext<AppContextType>({
-  sdHomeRef: null,
+  sdHomePath: "",
+  setSdHomePath: () => {},
   refMap: new Map<string, React.RefObject<CmpBaseRef>>(),
   history: init_history,
   setHistory: () => {},
@@ -62,8 +64,8 @@ const importJson = (refMap: Map<string, React.RefObject<CmpBaseRef>>, json: stri
 const AppProvider = ({ children }: any) => {
   const [history, setHistory] = React.useState([...init_history]);
   const [templates, setTemplates] = React.useState([...init_templates]);
-  const sdHomeRef = useRef<CmpBaseRef>(null);
-  return <AppContext.Provider value={{ sdHomeRef, refMap: new Map<string, React.RefObject<CmpBaseRef>>(), history, setHistory, templates, setTemplates }}>{children}</AppContext.Provider>;
+  const [sdHomePath, setSdHomePath] = React.useState(localStorage.getItem("sd-script-app_sd_home_path") || "");
+  return <AppContext.Provider value={{ sdHomePath, setSdHomePath, refMap: new Map<string, React.RefObject<CmpBaseRef>>(), history, setHistory, templates, setTemplates }}>{children}</AppContext.Provider>;
 };
 
 export { AppProvider, AppContext, AppContextType, deleteTemplateByName, importJson, exportJson };

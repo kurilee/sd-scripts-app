@@ -17,7 +17,7 @@ function App() {
         <Tabs.TabPane key="2" title={lang('app.template_pane')}>
           <TabTemplates />
         </Tabs.TabPane>
-        <Tabs.TabPane key="3" title={lang('app.history_pane')}>
+        <Tabs.TabPane key="3" title={lang('app.history_pane')} icon>
           <HistoryTab />
         </Tabs.TabPane>
         <Tabs.TabPane key="4" title={lang('app.setting_pane')}>

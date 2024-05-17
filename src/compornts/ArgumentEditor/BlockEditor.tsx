@@ -155,6 +155,8 @@ const BlockEditor = forwardRef<CmpBaseRef, CmpTextProps>((props, ref) => {
         autoFocus={false}
         focusLock={true}
         style={{ width: "54.5em" }}
+        okText={lang("app.btn.ok")}
+        cancelText={lang("app.btn.cancel")}
       >
         <Space direction="vertical" size={0}>
           <Space direction="horizontal">

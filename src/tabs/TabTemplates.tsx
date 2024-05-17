@@ -1,20 +1,22 @@
-import { useContext } from "react"
-import { AppContext } from "../AppContext"
-import { Space } from "@arco-design/web-react";
+import { useContext } from "react";
+import { AppContext } from "../AppContext";
+import { List } from "@arco-design/web-react";
 import { TemplateItem } from "../compornts/TemplateItem";
 
 const TabTemplates = (props: any) => {
-    const appContext = useContext(AppContext);
-    return (
-    <Space size="large" style={{ paddingLeft: '5px', paddingRight: '5px' }}>
-        {
-            appContext.templates.map((item: any, index: number) => {
-                return (
-                    <TemplateItem key={index} title={item.title} desc={item.desc} json={item.json} />
-                );
-            })
-        }
-    </Space>)
-}
+  const appContext = useContext(AppContext);
+  return (
+    <List
+      grid={{ gutter: 0, span: 8 }}
+      dataSource={appContext.templates}
+      bordered={false}
+      render={(item, index) => (
+        <List.Item key={index}>
+          <TemplateItem title={item.title} desc={item.desc} json={item.json} />
+        </List.Item>
+      )}
+    />
+  );
+};
 
-export { TabTemplates }
+export { TabTemplates };

@@ -111,6 +111,11 @@ const system: any = {
   "modal.title.block_editor": "Block Editor",
   "modal.title.save_template": "Save Template",
 
+  "modal.form.template_name": "Template Name",
+  "modal.form.template_desc": "Template Description",
+
+  "err.template_name_not_null": "Template name is nessarry.",
+
   "app.btn.ok": "OK",
   "app.btn.cancel": "Cancel",
   "app.btn.preview_cmd": "Preview",
@@ -119,6 +124,8 @@ const system: any = {
   "app.btn.apply": "Apply",
   "app.btn.delete": "Delete",
   "app.btn.clear": "Clear",
+  "app.btn.save_settings": "Save",
+  "app.btn.revert_settings": "Revert",
 };
 
 // Chinese
@@ -234,6 +241,11 @@ const cn: any = {
   "modal.title.block_editor": "分层编辑器",
   "modal.title.save_template": "保存到模板",
 
+  "modal.form.template_name": "模板名称",
+  "modal.form.template_desc": "模板描述",
+
+  "err.template_name_not_null": "模板名称不能为空",
+
   "app.btn.ok": "确定",
   "app.btn.cancel": "取消",
   "app.btn.preview_cmd": "预览命令",
@@ -242,17 +254,22 @@ const cn: any = {
   "app.btn.apply": "应用",
   "app.btn.delete": "删除",
   "app.btn.clear": "清空",
+  "app.btn.save_settings": "保存",
+  "app.btn.revert_settings": "撤销",
 };
 
 var type = "cn";
 const langs: any = { cn };
 
 const lang = (key: string) => {
-  var str = langs[type][key];
-  if (str === null || str === undefined) {
+  var str = "";
+  if (Object.keys(langs).find((k) => k === type)) {
+    str = langs[type][key];
+  }
+  if (str === null || str === undefined || str === "") {
     str = system[key];
   }
-  if (str === null || str === undefined) {
+  if (str === null || str === undefined || str === "") {
     return key;
   }
   return str;
