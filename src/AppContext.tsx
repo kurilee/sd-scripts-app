@@ -2,40 +2,43 @@ import React, { useRef } from "react";
 import { CmpBaseRef } from "./compornts/ArgumentEditor/ArgComponets";
 
 class AppContextType {
-  // ref Sd-Scripts path
+  // settings default path
   sdHomePath: string = "";
   setSdHomePath: any = () => {};
 
-  // refMap
+  checkpointPath: string = "";
+  setCheckpointPath: any = () => {};
+
+  vaePath: string = "";
+  setVaePath: any = () => {};
+
+  datasetPath: string = "";
+  setDatasetPath: any = () => {};
+
+  outputPath: string = "";
+  setOutputPath: any = () => {};
+
+  // args ref
   refMap: Map<string, React.RefObject<CmpBaseRef>> = new Map<string, React.RefObject<CmpBaseRef>>();
 
-  // 历史记录
+  // histories
   history: any[] = [];
   setHistory: any = () => {};
 
-  // 模板
+  // templates
   templates: any[] = [];
   setTemplates: any = () => {};
 }
 
-// localStorage.clear();
-// 从localStorage读取历史记录
+// read histories from localStorage
 const storage_history = localStorage.getItem("sd-script-app_history");
 const init_history: any[] = JSON.parse(storage_history == null ? "[]" : storage_history);
 
-// 从localStorage读取模板
+// read templates from localStorage
 const storage_templates = localStorage.getItem("sd-script-app_templates");
 const init_templates: any[] = JSON.parse(storage_templates == null ? "[]" : storage_templates);
 
-const AppContext = React.createContext<AppContextType>({
-  sdHomePath: "",
-  setSdHomePath: () => {},
-  refMap: new Map<string, React.RefObject<CmpBaseRef>>(),
-  history: init_history,
-  setHistory: () => {},
-  templates: init_templates,
-  setTemplates: () => {},
-});
+const AppContext = React.createContext<AppContextType>(new AppContextType());
 
 const deleteTemplateByName = (templates: any[], name: string) => {
   return [...templates.filter((item: any) => item.title !== name)];
@@ -65,7 +68,33 @@ const AppProvider = ({ children }: any) => {
   const [history, setHistory] = React.useState([...init_history]);
   const [templates, setTemplates] = React.useState([...init_templates]);
   const [sdHomePath, setSdHomePath] = React.useState(localStorage.getItem("sd-script-app_sd_home_path") || "");
-  return <AppContext.Provider value={{ sdHomePath, setSdHomePath, refMap: new Map<string, React.RefObject<CmpBaseRef>>(), history, setHistory, templates, setTemplates }}>{children}</AppContext.Provider>;
+  const [checkpointPath, setCheckpointPath] = React.useState(localStorage.getItem("sd-script-app_checkpoint_path") || "");
+  const [vaePath, setVaePath] = React.useState(localStorage.getItem("sd-script-app_vae_path") || "");
+  const [datasetPath, setDatasetPath] = React.useState(localStorage.getItem("sd-script-app_dataset_path") || "");
+  const [outputPath, setOutputPath] = React.useState(localStorage.getItem("sd-script-app_output_path") || "");
+  return (
+    <AppContext.Provider
+      value={{
+        sdHomePath,
+        setSdHomePath,
+        checkpointPath,
+        setCheckpointPath,
+        vaePath,
+        setVaePath,   
+        datasetPath,
+        setDatasetPath,  
+        outputPath,
+        setOutputPath,
+        refMap: new Map<string, React.RefObject<CmpBaseRef>>(),
+        history,
+        setHistory,
+        templates,
+        setTemplates,
+      }}
+    >
+      {children}
+    </AppContext.Provider>
+  );
 };
 
 export { AppProvider, AppContext, AppContextType, deleteTemplateByName, importJson, exportJson };

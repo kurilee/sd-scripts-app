@@ -26,9 +26,9 @@ function getArgString(isOptional:boolean, enable:boolean, id:string, value:strin
 }
 
 // 常量属性
-const titleWidth = '364px';
-const fullTitleWidth = '400px';
-const valueWidth = '220px';
+const titleWidth = '314px';
+const fullTitleWidth = '350px';
+const valueWidth = '270px';
 
 const ComponentUtils = {
   getTypStyle,
