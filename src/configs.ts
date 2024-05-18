@@ -40,7 +40,7 @@ const configs = {
       ],
     },
     {
-      id: "2",
+      id: "configs.group.save&log",
       title: lang("configs.group.save&log"),
       args: [
         { visible: true, type: "text", id: "save_model_as", title: lang("configs.save.save_model_as"), defaultValue: "safetensors", isOptional: false, enable: true },
@@ -53,7 +53,7 @@ const configs = {
       ],
     },
     {
-      id: "3",
+      id: "configs.group.train",
       title: lang("configs.group.train"),
       args: [
         { visible: true, type: "switch", id: "xformers", title: lang("configs.train.xformers"), defaultValue: "", isOptional: true, enable: false },
@@ -78,7 +78,7 @@ const configs = {
       ],
     },
     {
-      id: "4",
+      id: "configs.group.network",
       title: lang("configs.group.network"),
       args: [
         { visible: true, type: "text", id: "resolution", title: lang("configs.network.resolution"), defaultValue: "512,512", isOptional: false, enable: true },
@@ -92,7 +92,7 @@ const configs = {
       ],
     },
     {
-      id: "5",
+      id: "configs.group.learning",
       title: lang("configs.group.learning"),
       args: [
         { visible: true, type: "combox", id: "optimizer_type", title: lang("configs.learning.optimizer_type"), defaultValue: "Prodigy", isOptional: false, enable: true, options: optTypes },
@@ -107,7 +107,7 @@ const configs = {
       ],
     },
     {
-      id: "6",
+      id: "configs.group.loss",
       title: lang("configs.group.loss"),
       args: [
         { visible: true, type: "combox", id: "loss_type", title: lang("configs.loss.loss_type"), defaultValue: "huber", isOptional: true, enable: false, options: loseTypes },
@@ -116,7 +116,7 @@ const configs = {
       ],
     },
     {
-      id: "71",
+      id: "configs.group.data_enforce",
       title: lang("configs.group.data_enforce"),
       args: [
         { visible: true, type: "switch", id: "color_aug", title: lang("configs.data_enforce.color_aug"), defaultValue: "", isOptional: true, enable: false },
@@ -125,7 +125,7 @@ const configs = {
       ],
     },
     {
-      id: "7",
+      id: "configs.group.tags",
       title: lang("configs.group.tags"),
       args: [
         { visible: true, type: "text", id: "caption_extension", title: lang("configs.tags.caption_extension"), defaultValue: ".txt", isOptional: false, enable: false },
@@ -136,7 +136,7 @@ const configs = {
       ],
     },
     {
-      id: "8",
+      id: "configs.group.preview",
       title: lang("configs.group.preview"),
       args: [
         { visible: true, type: "num", id: "sample_every_n_epochs", title: lang("configs.preview.sample_every_n_epochs"), defaultValue: 1, isOptional: true, enable: false, min: 0, max: 300, step: 1, precision: 0 },
@@ -145,7 +145,7 @@ const configs = {
       ],
     },
     {
-      id: "9",
+      id: "configs.group.noise",
       title: lang("configs.group.noise"),
       args: [
         { visible: true, type: "num", id: "noise_offset", title: lang("configs.noise.noise_offset"), defaultValue: 0.1, isOptional: true, enable: false, min: 0, max: 1, step: 0.001, precision: 3 },
@@ -159,7 +159,7 @@ const configs = {
       ],
     },
     {
-      id: "10",
+      id: "configs.group.layer",
       title: lang("configs.group.layer"),
       args: [
         { visible: true, type: "switch", id: "network_args", title: lang("configs.layer.network_args"), defaultValue: "", isOptional: true, enable: false },

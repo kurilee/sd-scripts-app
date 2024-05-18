@@ -6,6 +6,7 @@ import { AppProvider } from "./AppContext";
 import { TabSettings } from "./tabs/TabSettings";
 import { TabTemplates } from "./tabs/TabTemplates";
 import { lang } from './i18n';
+import { TabSetup } from "./tabs/TabSetup";
 
 function App() {
   return (
@@ -22,6 +23,9 @@ function App() {
         </Tabs.TabPane>
         <Tabs.TabPane key="4" title={lang('app.setting_pane')}>
           <TabSettings />
+        </Tabs.TabPane>
+        <Tabs.TabPane key="5" title={lang('app.setup_pane')}>
+          <TabSetup />
         </Tabs.TabPane>
       </Tabs>
     </AppProvider>

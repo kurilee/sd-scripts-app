@@ -17,8 +17,9 @@
         "all": true,
         "execute": true,
         "sidecar": true,
-        "scope": [ 
-          { "name": "start cmd", "cmd": "cmd", "args": true }
+        "scope": [
+          { "name": "start cmd", "cmd": "cmd", "args": true },
+          { "name": "git", "cmd": "git", "args": true }
         ]
       },
       "path": {
@@ -34,16 +35,15 @@
       },
       "clipboard": {
         "all": true
+      },
+      "fs": {
+        "all": true,
+        "scope": ["C:\\Program Files\\Python310"]
       }
     },
     "bundle": {
       "active": true,
-      "icon": [
-        "icons/32x32.png",
-        "icons/128x128.png",
-        "icons/128x128@2x.png",
-        "icons/icon.ico"
-      ],
+      "icon": ["icons/32x32.png", "icons/128x128.png", "icons/128x128@2x.png", "icons/icon.ico"],
       "identifier": "com.kurilee.sdscriptsapp",
       "targets": "all"
     },
