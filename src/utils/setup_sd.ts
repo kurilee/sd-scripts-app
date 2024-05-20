@@ -1,13 +1,14 @@
 import { Command, open } from "@tauri-apps/api/shell";
 import { fs, path } from "@tauri-apps/api";
+import { CmdContextObj } from "./console";
 
 const sdScriptsResp = "https://github.com/kohya-ss/sd-scripts.git";
 
-const checkPython = async (): Promise<boolean> => {
+const checkPython = async (cmdContext: CmdContextObj): Promise<boolean> => {
   var py310_folder_exists = await fs.exists("C:\\Program Files\\Python310");
   return py310_folder_exists;
 };
-const checkGit = async (): Promise<boolean> => {
+const checkGit = async (cmdContext: CmdContextObj): Promise<boolean> => {
   var cmd = new Command("git", ["--version"]);
   try {
     var output = await cmd.execute();
@@ -16,7 +17,7 @@ const checkGit = async (): Promise<boolean> => {
     return false;
   }
 };
-const cloneSdScript = async (): Promise<boolean> => {
+const cloneSdScript = async (cmdContext: CmdContextObj): Promise<boolean> => {
   var cmd = new Command("git", [
     "clone",
     sdScriptsResp,
@@ -32,12 +33,12 @@ const cloneSdScript = async (): Promise<boolean> => {
 const openSdScriptFolder = async () => {
   open((await path.appDataDir()) + "sd-scripts");
 }
-const installVirtualenv = async () => {
+const installVirtualenv = async (cmdContext: CmdContextObj) => {
   var args = `/c pip install -q virtualenv`;
-  console.log(args);
   var cmd = new Command("start cmd", args);
   try {
     cmd.stdout.on("data", (line) => {
+      cmdContext.addOutput(line);
       console.log(line);
     });
     var output = await cmd.execute();
@@ -46,7 +47,7 @@ const installVirtualenv = async () => {
     return false;
   }
 }
-const createVenv = async () => {
+const createVenv = async (cmdContext: CmdContextObj) => {
   var sd_scripts_path = (await path.appDataDir()) + "sd-scripts";
   var venv = sd_scripts_path + "\\venv";
   var args = `/c python.exe -m virtualenv ${venv}`;
@@ -54,6 +55,7 @@ const createVenv = async () => {
   var cmd = new Command("start cmd", args);
   try {
     cmd.stdout.on("data", (line) => {
+      cmdContext.addOutput(line);
       console.log(line);
     });
     var output = await cmd.execute();
@@ -62,7 +64,7 @@ const createVenv = async () => {
     return false;
   }
 };
-const installRequirement = async () => {
+const installRequirement = async (cmdContext: CmdContextObj) => {
   var sd_scripts_path = (await path.appDataDir()) + "sd-scripts";
   var pip = sd_scripts_path + "\\venv\\Scripts\\python.exe -m pip";
   var requirements = "requirements.txt";
@@ -71,16 +73,18 @@ const installRequirement = async () => {
   var cmd = new Command("start cmd", args);
   try {
     cmd.stdout.on("data", (line) => {
+      cmdContext.addOutput(line);
       console.log(line);
     });
     var output = await cmd.execute();
     return output.code == 0;
   } catch (e: any) {
+    cmdContext.addOutput(e.message);
     return false;
   }
 };
-const setup = async () => {
-  return await checkPython() && await checkGit() && await cloneSdScript() && await createVenv() && await installRequirement();
+const setup = async (cmdContext: CmdContextObj) => {
+  return await checkPython(cmdContext) && await checkGit(cmdContext) && await cloneSdScript(cmdContext) && await createVenv(cmdContext) && await installRequirement(cmdContext);
 }
 
-export { checkPython, checkGit, cloneSdScript, installVirtualenv, createVenv, installRequirement, setup }
+export { checkPython, checkGit, cloneSdScript, installVirtualenv, createVenv, installRequirement, setup, openSdScriptFolder }

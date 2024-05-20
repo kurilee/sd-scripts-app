@@ -1,10 +1,13 @@
 import { Button, Message, Space } from '@arco-design/web-react';
 import { lang } from '../i18n';
-import { checkGit, checkPython, cloneSdScript, installVirtualenv, createVenv, installRequirement } from '../utils/setup_sd';
+import { checkGit, checkPython, cloneSdScript, installVirtualenv, createVenv, installRequirement, openSdScriptFolder } from '../utils/setup_sd';
+import { useContext } from 'react';
+import { CmdContext, CmdContextObj } from '../utils/console';
 
 const TabSetup = (props: any) => {
-  const checkAndInfo = async (checkFun: () => Promise<boolean>) => {
-    Message.info(await checkFun() ? lang('app.setup.check_ok') : lang('app.setup.check_fail'));
+  const cmdContext = useContext(CmdContext);
+  const checkAndInfo = async (checkFun: (cmdContext: CmdContextObj) => Promise<boolean>) => {
+    Message.info(await checkFun(cmdContext) ? lang('app.setup.check_ok') : lang('app.setup.check_fail'));
   }
   return (
     <Space>
@@ -43,6 +46,9 @@ const TabSetup = (props: any) => {
           await checkAndInfo(installRequirement);
         }}>
         {lang('app.setup.install_requirement')}
+      </Button>
+      <Button onClick={() => { openSdScriptFolder() }}>
+        {lang('app.setup.open_sd_home')}
       </Button>
     </Space>
   );
