@@ -8,6 +8,7 @@ import { Command } from "@tauri-apps/api/shell";
 import { configs } from "../configs";
 import { AppContext, AppContextType, exportJson } from "../AppContext";
 import { lang } from "../i18n";
+import { CmdContext, CmdContextObj } from "../utils/CmdContext";
 
 //
 const script_name = ["train_network.py", "sdxl_train_network.py"];
@@ -16,6 +17,7 @@ const TabTrain = (props: any) => {
   const [result, setResult] = useState("");
   const sdScriptRef = useRef<CmpBaseRef>(null);
   const appContext = useContext<AppContextType>(AppContext);
+  const cmdContext = useContext<CmdContextObj>(CmdContext);
   const [saveTemplateModalVisible, setSaveTemplateModalVisible] = useState(false);
   const [saveTemplateName, setSaveTemplateName] = useState("");
   const [saveTemplateDesc, setsaveTemplateDesc] = useState("");
@@ -56,9 +58,13 @@ const TabTrain = (props: any) => {
     var json_result = JSON.stringify(copyHistory);
     localStorage.setItem("sd-script-app_history", json_result);
 
-    var args = `/c start cmd /k ${result.trimEnd()} & exit`;
+    var args = `/c start /c ${result.trimEnd()}`;
+    console.log(args);
     var cmd = new Command("start cmd", args);
-    var output = await cmd.spawn();
+    cmd.stdout.on('data', (line) => {
+      cmdContext.addOutput(line);
+    });
+    var output = await cmd.execute();
   };
 
   // 创建组

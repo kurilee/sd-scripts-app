@@ -4,6 +4,7 @@ const system: any = {
   "app.template_pane": "Template",
   "app.history_pane": "History",
   "app.setting_pane": "Setting",
+  "app.setup_pane": "Setup",
 
   "tab.train.script_group": "Script",
   "tab.train.script_group.script": "Script",
@@ -109,6 +110,18 @@ const system: any = {
   "configs.layer.block_dims": "block_dims",
   "configs.layer.block_alphas": "block_alphas",
 
+  "app.setup.check_python": "Check Python",
+  "app.setup.check_git": "Check Git",
+  "app.setup.clone": "Clone Sd-Scripts",
+  "app.setup.install_virtualvenv": "Install Virtualenv",
+  "app.setup.create_venv": "Create venv",
+  "app.setup.install_pytorch": "Install Pytorch",
+  "app.setup.install_requirement": "Install Requirement",
+  "app.setup.install_xformers": "Install Xformers",
+  "app.setup.open_sd_home": "Open Sd-Scripts",
+  "app.setup.check_ok": "Success",
+  "app.setup.check_failed": "Failed",
+
   "editor.btn.open_dialog": "Open",
   "editor.btn.block_editor": "Editor",
 
@@ -130,6 +143,7 @@ const system: any = {
   "app.btn.clear": "Clear",
   "app.btn.save_settings": "Save",
   "app.btn.revert_settings": "Revert",
+  "app.btn.open_console": "Console",
 };
 
 // Chinese
@@ -138,6 +152,7 @@ const cn: any = {
   "app.template_pane": "模板",
   "app.history_pane": "历史记录",
   "app.setting_pane": "配置",
+  "app.setup_pane": "安装",
 
   "tab.train.script_group": "脚本",
   "tab.train.script_group.script": "训练类型",
@@ -243,6 +258,18 @@ const cn: any = {
   "configs.layer.block_dims": "分层Dim",
   "configs.layer.block_alphas": "分层Alphas",
 
+  "app.setup.check_python": "检查Python",
+  "app.setup.check_git": "检查Git",
+  "app.setup.clone": "拉取Sd-Scripts",
+  "app.setup.install_virtualvenv": "安装Virtualenv",
+  "app.setup.create_venv": "创建venv",
+  "app.setup.install_pytorch": "安装Pytorch",
+  "app.setup.install_requirement": "安装Requirement",
+  "app.setup.install_xformers": "安装Xformers",
+  "app.setup.open_sd_home": "打开Sd-Scripts",
+  "app.setup.check_ok": "检查通过",
+  "app.setup.check_failed": "检查失败",
+
   "editor.open_dialog": "浏览",
   "editor.btn.block_editor": "编辑器",
 
@@ -264,6 +291,7 @@ const cn: any = {
   "app.btn.clear": "清空",
   "app.btn.save_settings": "保存",
   "app.btn.revert_settings": "撤销",
+  "app.btn.open_console": "控制台",
 };
 
 var type = "cn";

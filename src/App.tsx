@@ -1,5 +1,5 @@
 import "./App.css";
-import { Button, Drawer, Tabs, Input, Typography } from "@arco-design/web-react";
+import { Button, Drawer, Tabs, Input, Typography, Space } from "@arco-design/web-react";
 import { TabTrain } from "./tabs/TabTrain";
 import { HistoryTab } from "./tabs/TabHistory";
 import { AppProvider } from "./AppContext";
@@ -8,7 +8,7 @@ import { TabTemplates } from "./tabs/TabTemplates";
 import { lang } from "./i18n";
 import { TabSetup } from "./tabs/TabSetup";
 import { useContext, useState } from "react";
-import { CmdContext, CmdProvider } from "./utils/console";
+import { CmdContext, CmdProvider } from "./utils/CmdContext";
 
 function App() {
   const [drawerVisible, setDrawerVisible] = useState<boolean>(false);
@@ -18,7 +18,7 @@ function App() {
         <Tabs
           defaultActiveTab="1"
           extra={
-            <Button
+            <Button style={{ marginRight: "5px" }}
               onClick={() => {
                 setDrawerVisible(!drawerVisible);
               }}
@@ -44,8 +44,6 @@ function App() {
           </Tabs.TabPane>
         </Tabs>
         <Drawer
-          width={332}
-          height={332}
           title={<span>Basic Information </span>}
           visible={drawerVisible}
           placement="bottom"
@@ -65,7 +63,15 @@ function App() {
 
 const Console = (props: any) => {
   const cmdContext = useContext(CmdContext);
-  return <Typography.Text>{cmdContext.output}</Typography.Text>;
+  return (
+    <Space direction="vertical">
+      {
+        cmdContext.output.map((item) => {
+          return <Typography.Text>{item}</Typography.Text>
+        })
+      }
+    </Space>
+  )
 };
 
 export default App;

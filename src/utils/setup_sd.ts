@@ -1,6 +1,6 @@
 import { Command, open } from "@tauri-apps/api/shell";
 import { fs, path } from "@tauri-apps/api";
-import { CmdContextObj } from "./console";
+import { CmdContext, CmdContextObj } from "./CmdContext";
 
 const sdScriptsResp = "https://github.com/kohya-ss/sd-scripts.git";
 
@@ -21,7 +21,7 @@ const cloneSdScript = async (cmdContext: CmdContextObj): Promise<boolean> => {
   var cmd = new Command("git", [
     "clone",
     sdScriptsResp,
-    (await path.appDataDir()) + "\\sd-scripts",
+    (await path.appDataDir()) + "sd-scripts",
   ]);
   try {
     var output = await cmd.execute();
@@ -31,7 +31,7 @@ const cloneSdScript = async (cmdContext: CmdContextObj): Promise<boolean> => {
   }
 };
 const openSdScriptFolder = async () => {
-  open((await path.appDataDir()) + "sd-scripts");
+  open((await path.appDataDir()));
 }
 const installVirtualenv = async (cmdContext: CmdContextObj) => {
   var args = `/c pip install -q virtualenv`;
@@ -39,7 +39,6 @@ const installVirtualenv = async (cmdContext: CmdContextObj) => {
   try {
     cmd.stdout.on("data", (line) => {
       cmdContext.addOutput(line);
-      console.log(line);
     });
     var output = await cmd.execute();
     return output.code == 0;
@@ -51,12 +50,10 @@ const createVenv = async (cmdContext: CmdContextObj) => {
   var sd_scripts_path = (await path.appDataDir()) + "sd-scripts";
   var venv = sd_scripts_path + "\\venv";
   var args = `/c python.exe -m virtualenv ${venv}`;
-  console.log(args);
   var cmd = new Command("start cmd", args);
   try {
     cmd.stdout.on("data", (line) => {
       cmdContext.addOutput(line);
-      console.log(line);
     });
     var output = await cmd.execute();
     return output.code == 0;
@@ -64,17 +61,23 @@ const createVenv = async (cmdContext: CmdContextObj) => {
     return false;
   }
 };
+const installPytorch = async (cmdContext: CmdContextObj) => {
+  return await pipInstall(cmdContext, "torch==2.1.2 torchvision==0.16.2 --index-url https://download.pytorch.org/whl/cu118");
+};
 const installRequirement = async (cmdContext: CmdContextObj) => {
+  return await pipInstall(cmdContext, "-r requirements.txt");
+};
+const installXformers = async (cmdContext: CmdContextObj) => {
+  return await pipInstall(cmdContext, "xformers==0.0.23.post1 --index-url https://download.pytorch.org/whl/cu118");
+};
+const pipInstall = async (cmdContext: CmdContextObj, installStr: string) => {
   var sd_scripts_path = (await path.appDataDir()) + "sd-scripts";
   var pip = sd_scripts_path + "\\venv\\Scripts\\python.exe -m pip";
-  var requirements = "requirements.txt";
-  var args = `/c cd ${sd_scripts_path} && ${pip} install -r ${requirements}`;
-  console.log(args);
+  var args = `/c cd ${sd_scripts_path} && ${pip} install ${installStr}`;
   var cmd = new Command("start cmd", args);
   try {
     cmd.stdout.on("data", (line) => {
       cmdContext.addOutput(line);
-      console.log(line);
     });
     var output = await cmd.execute();
     return output.code == 0;
@@ -87,4 +90,4 @@ const setup = async (cmdContext: CmdContextObj) => {
   return await checkPython(cmdContext) && await checkGit(cmdContext) && await cloneSdScript(cmdContext) && await createVenv(cmdContext) && await installRequirement(cmdContext);
 }
 
-export { checkPython, checkGit, cloneSdScript, installVirtualenv, createVenv, installRequirement, setup, openSdScriptFolder }
+export { checkPython, checkGit, cloneSdScript, installVirtualenv, createVenv, installPytorch, installRequirement, installXformers, setup, openSdScriptFolder }

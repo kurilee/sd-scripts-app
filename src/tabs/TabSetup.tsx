@@ -1,16 +1,16 @@
 import { Button, Message, Space } from '@arco-design/web-react';
 import { lang } from '../i18n';
-import { checkGit, checkPython, cloneSdScript, installVirtualenv, createVenv, installRequirement, openSdScriptFolder } from '../utils/setup_sd';
+import { checkGit, checkPython, cloneSdScript, installVirtualenv, createVenv, installPytorch, installRequirement, installXformers, openSdScriptFolder } from '../utils/setup_sd';
 import { useContext } from 'react';
-import { CmdContext, CmdContextObj } from '../utils/console';
+import { CmdContext, CmdContextObj } from '../utils/CmdContext';
 
 const TabSetup = (props: any) => {
   const cmdContext = useContext(CmdContext);
   const checkAndInfo = async (checkFun: (cmdContext: CmdContextObj) => Promise<boolean>) => {
-    Message.info(await checkFun(cmdContext) ? lang('app.setup.check_ok') : lang('app.setup.check_fail'));
+    Message.info(await checkFun(cmdContext) ? lang('app.setup.check_ok') : lang('app.setup.check_failed'));
   }
   return (
-    <Space>
+    <Space style={{ paddingLeft: '5px', paddingRight: '5px' }}>
       <Button
         onClick={async () => {
           await checkAndInfo(checkPython);
@@ -43,9 +43,21 @@ const TabSetup = (props: any) => {
       </Button>
       <Button
         onClick={async () => {
+          await checkAndInfo(installPytorch);
+        }}>
+        {lang('app.setup.install_pytorch')}
+      </Button>
+      <Button
+        onClick={async () => {
           await checkAndInfo(installRequirement);
         }}>
         {lang('app.setup.install_requirement')}
+      </Button>
+      <Button
+        onClick={async () => {
+          await checkAndInfo(installXformers);
+        }}>
+        {lang('app.setup.install_xformers')}
       </Button>
       <Button onClick={() => { openSdScriptFolder() }}>
         {lang('app.setup.open_sd_home')}
