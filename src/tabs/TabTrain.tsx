@@ -58,12 +58,11 @@ const TabTrain = (props: any) => {
     var json_result = JSON.stringify(copyHistory);
     localStorage.setItem("sd-script-app_history", json_result);
 
-    var args = `/c start /c ${result.trimEnd()}`;
+    var args = `/c start cmd /c ${result.trimEnd()}`;
     console.log(args);
     var cmd = new Command("start cmd", args);
-    cmd.stdout.on('data', (line) => {
-      cmdContext.addOutput(line);
-    });
+    cmd.stdout.on('data', cmdContext.setOutput);
+    cmd.stderr.on('data', cmdContext.setOutput);
     var output = await cmd.execute();
   };
 

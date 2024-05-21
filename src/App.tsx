@@ -18,7 +18,8 @@ function App() {
         <Tabs
           defaultActiveTab="1"
           extra={
-            <Button style={{ marginRight: "5px" }}
+            <Button
+              style={{ marginRight: "5px" }}
               onClick={() => {
                 setDrawerVisible(!drawerVisible);
               }}
@@ -63,15 +64,7 @@ function App() {
 
 const Console = (props: any) => {
   const cmdContext = useContext(CmdContext);
-  return (
-    <Space direction="vertical">
-      {
-        cmdContext.output.map((item) => {
-          return <Typography.Text>{item}</Typography.Text>
-        })
-      }
-    </Space>
-  )
+  return <Space direction="vertical">{cmdContext.output}</Space>;
 };
 
 export default App;

@@ -11,6 +11,8 @@ const checkPython = async (cmdContext: CmdContextObj): Promise<boolean> => {
 const checkGit = async (cmdContext: CmdContextObj): Promise<boolean> => {
   var cmd = new Command("git", ["--version"]);
   try {
+    cmd.stdout.on("data", cmdContext.setOutput);
+    cmd.stderr.on("data", cmdContext.setOutput);
     var output = await cmd.execute();
     return true;
   } catch (e: any) {
@@ -24,6 +26,8 @@ const cloneSdScript = async (cmdContext: CmdContextObj): Promise<boolean> => {
     (await path.appDataDir()) + "sd-scripts",
   ]);
   try {
+    cmd.stdout.on("data", cmdContext.setOutput);
+    cmd.stderr.on("data", cmdContext.setOutput);
     var output = await cmd.execute();
     return output.code == 0;
   } catch (e: any) {
@@ -37,9 +41,8 @@ const installVirtualenv = async (cmdContext: CmdContextObj) => {
   var args = `/c pip install -q virtualenv`;
   var cmd = new Command("start cmd", args);
   try {
-    cmd.stdout.on("data", (line) => {
-      cmdContext.addOutput(line);
-    });
+    cmd.stdout.on("data", cmdContext.setOutput);
+    cmd.stderr.on("data", cmdContext.setOutput);
     var output = await cmd.execute();
     return output.code == 0;
   } catch (e: any) {
@@ -52,9 +55,8 @@ const createVenv = async (cmdContext: CmdContextObj) => {
   var args = `/c python.exe -m virtualenv ${venv}`;
   var cmd = new Command("start cmd", args);
   try {
-    cmd.stdout.on("data", (line) => {
-      cmdContext.addOutput(line);
-    });
+    cmd.stdout.on("data", cmdContext.setOutput);
+    cmd.stderr.on("data", cmdContext.setOutput);
     var output = await cmd.execute();
     return output.code == 0;
   } catch (e: any) {
@@ -76,13 +78,11 @@ const pipInstall = async (cmdContext: CmdContextObj, installStr: string) => {
   var args = `/c cd ${sd_scripts_path} && ${pip} install ${installStr}`;
   var cmd = new Command("start cmd", args);
   try {
-    cmd.stdout.on("data", (line) => {
-      cmdContext.addOutput(line);
-    });
+    cmd.stdout.on("data", cmdContext.setOutput);
+    cmd.stderr.on("data", cmdContext.setOutput);
     var output = await cmd.execute();
     return output.code == 0;
   } catch (e: any) {
-    cmdContext.addOutput(e.message);
     return false;
   }
 };
