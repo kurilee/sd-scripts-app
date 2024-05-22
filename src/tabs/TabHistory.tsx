@@ -25,14 +25,23 @@ const HistoryTab = (props: any) => {
           {lang("app.btn.clear")}
         </Button>
       </Space>
-      <Space direction="vertical" >
-        {appContext.history.reverse().map((item: any, index: number) => {
-          return (
-            <List.Item key={index}>
-              <HistoryItem path={item.path} title={item.title} date={item.date} content={item.content} json={item.json} folder={item.folder} />
-            </List.Item>
-          );
-        })}
+      <Space direction="vertical" style={{ width: "100%" }}>
+        <List>
+          {appContext.history.reverse().map((item: any, index: number) => {
+            return (
+              <List.Item key={index}>
+                <HistoryItem
+                  path={item.path}
+                  title={item.title}
+                  date={item.date}
+                  content={item.content}
+                  json={item.json}
+                  folder={item.folder}
+                />
+              </List.Item>
+            );
+          })}
+        </List>
       </Space>
     </div>
   );

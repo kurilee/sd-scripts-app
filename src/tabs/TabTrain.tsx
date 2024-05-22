@@ -9,6 +9,7 @@ import { configs } from "../configs";
 import { AppContext, AppContextType, exportJson } from "../AppContext";
 import { lang } from "../i18n";
 import { CmdContext, CmdContextObj } from "../utils/CmdContext";
+import { TrainQueueContext, TrainQueueObj, addToQueue } from "../utils/TrainQueue";
 
 //
 const script_name = ["train_network.py", "sdxl_train_network.py"];
@@ -18,6 +19,7 @@ const TabTrain = (props: any) => {
   const sdScriptRef = useRef<CmpBaseRef>(null);
   const appContext = useContext<AppContextType>(AppContext);
   const cmdContext = useContext<CmdContextObj>(CmdContext);
+  const trainQueueContext = useContext<TrainQueueObj>(TrainQueueContext);
   const [saveTemplateModalVisible, setSaveTemplateModalVisible] = useState(false);
   const [saveTemplateName, setSaveTemplateName] = useState("");
   const [saveTemplateDesc, setsaveTemplateDesc] = useState("");
@@ -65,6 +67,15 @@ const TabTrain = (props: any) => {
     cmd.stderr.on('data', cmdContext.setOutput);
     var output = await cmd.execute();
   };
+
+  const add = () => {
+    var file_name = appContext.refMap.get("output_name")?.current?.getEditorString().trim();
+    var file_folder = appContext.refMap.get("output_dir")?.current?.getEditorString().trim();
+    var file_ext = appContext.refMap.get("save_model_as")?.current?.getEditorString().trim();
+    var full_file_path = `${file_folder}\\${file_name}.${file_ext}`;
+    var obj = { title: file_name, date: new Date(), content: result, json: exportJson(appContext.refMap), path: full_file_path, folder: file_folder };
+    addToQueue(trainQueueContext, file_name || '', obj);
+  }
 
   // 创建组
   const createGroup = (group: any) => {
@@ -184,6 +195,11 @@ const TabTrain = (props: any) => {
                 icon={<IconSave />}
               >
                 {lang("app.btn.save_template")}
+              </Button>
+              <Button onClick={() => {
+                add();
+              }}>
+                {lang('app.btn.add_to_queue')}
               </Button>
             </Space>
             <Space style={{ width: "100%" }}>

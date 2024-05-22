@@ -26,4 +26,4 @@ const TrainQueueProvider = ({ children }: any) => {
     )
 }
 
-export { TrainQueueObj, TrainQueueContext, TrainQueueProvider }
+export { TrainQueueObj, TrainQueueContext, TrainQueueProvider, queue_map, addToQueue, removeFromQueue }
