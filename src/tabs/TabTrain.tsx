@@ -187,6 +187,11 @@ const TabTrain = (props: any) => {
               >
                 {lang("app.btn.run_cmd")}
               </Button>
+              <Button onClick={() => {
+                add();
+              }}>
+                {lang('app.btn.add_to_queue')}
+              </Button>
               <Button
                 type="primary"
                 onClick={() => {
@@ -195,11 +200,6 @@ const TabTrain = (props: any) => {
                 icon={<IconSave />}
               >
                 {lang("app.btn.save_template")}
-              </Button>
-              <Button onClick={() => {
-                add();
-              }}>
-                {lang('app.btn.add_to_queue')}
               </Button>
             </Space>
             <Space style={{ width: "100%" }}>

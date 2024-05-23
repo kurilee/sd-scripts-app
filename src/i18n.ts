@@ -5,6 +5,7 @@ const system: any = {
   "app.history_pane": "History",
   "app.setting_pane": "Setting",
   "app.setup_pane": "Setup",
+  "app.queue_pane": "Queue",
 
   "tab.train.script_group": "Script",
   "tab.train.script_group.script": "Script",
@@ -137,6 +138,7 @@ const system: any = {
   "app.btn.cancel": "Cancel",
   "app.btn.preview_cmd": "Preview",
   "app.btn.run_cmd": "Run",
+  "app.btn.add_to_queue": "Queue",
   "app.btn.save_template": "Save",
   "app.btn.apply": "Apply",
   "app.btn.delete": "Delete",
@@ -144,6 +146,7 @@ const system: any = {
   "app.btn.save_settings": "Save",
   "app.btn.revert_settings": "Revert",
   "app.btn.open_console": "Console",
+  "app.btn.queue_start": "Start",
 };
 
 // Chinese
@@ -153,6 +156,7 @@ const cn: any = {
   "app.history_pane": "历史记录",
   "app.setting_pane": "配置",
   "app.setup_pane": "安装",
+  "app.queue_pane": "队列",
 
   "tab.train.script_group": "脚本",
   "tab.train.script_group.script": "训练类型",
@@ -285,6 +289,7 @@ const cn: any = {
   "app.btn.cancel": "取消",
   "app.btn.preview_cmd": "预览命令",
   "app.btn.run_cmd": "执行",
+  "app.btn.add_to_queue": "添加到队列",
   "app.btn.save_template": "保存为模板",
   "app.btn.apply": "应用",
   "app.btn.delete": "删除",
@@ -292,6 +297,7 @@ const cn: any = {
   "app.btn.save_settings": "保存",
   "app.btn.revert_settings": "撤销",
   "app.btn.open_console": "控制台",
+  "app.btn.queue_start": "开始执行",
 };
 
 var type = "cn";
