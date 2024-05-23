@@ -8,7 +8,11 @@ class CmdContextObj {
 const CmdContext = React.createContext<CmdContextObj>(new CmdContextObj());
 
 const CmdProvider = ({ children }: any) => {
-  const [output, setOutput] = React.useState<string>("");
+  const [output, setOutputInner] = React.useState<string>("");
+  const setOutput = (line: string) => {
+    console.log(line);
+    setOutputInner(line);
+  }
   return <CmdContext.Provider value={{ output, setOutput }}>{children}</CmdContext.Provider>;
 };
 

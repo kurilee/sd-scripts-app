@@ -43,7 +43,7 @@ const TabTrain = (props: any) => {
         }
       }
     });
-    setResult(cmd);
+    setResult(cmd.trimEnd());
     clipboard.writeText(cmd);
   };
 
@@ -60,7 +60,7 @@ const TabTrain = (props: any) => {
     var json_result = JSON.stringify(copyHistory);
     localStorage.setItem("sd-script-app_history", json_result);
 
-    var args = `/c start cmd /c ${result.trimEnd()}`;
+    var args = `/c start cmd /c ${result}`;
     console.log(args);
     var cmd = new Command("start cmd", args);
     cmd.stdout.on('data', cmdContext.setOutput);
