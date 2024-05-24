@@ -1,3 +1,4 @@
+![Logo](https://github.com/kurilee/sd-scripts-app/blob/main/logo.png?raw=true)
 # Sd-Scripts-App
 ## 一个Sd-Scripts训练脚本的界面工具  
   
