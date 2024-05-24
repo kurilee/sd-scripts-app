@@ -78,7 +78,7 @@ const TabQueue = (props: any) => {
                   />,
                 ]}
               >
-                <Typography.Text>{queue_map.get(item).title}</Typography.Text>
+                <Typography.Text key={item}>{queue_map.get(item).title}</Typography.Text>
               </List.Item>
             );
           })}
