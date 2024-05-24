@@ -43,7 +43,7 @@
     },
     "bundle": {
       "active": true,
-      "icon": ["icons/Sd-Script-App.png", "icons/Sd-Script-App@2x.png", "icons/Sd-Script-App@512.png", "icons/Sd-Script-App.ico"],
+      "icon": ["icons/Sd-Script-App.ico"],
       "identifier": "com.kurilee.sdscriptsapp",
       "targets": "all"
     },
